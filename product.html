@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/alerts.css" />
 <link rel="stylesheet" href="css/rtl.css" />
+<link rel="stylesheet" href="css/mobile.css" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 </head>
 <body>
@@ -107,13 +108,15 @@ UI.init({
     const addBtn = document.getElementById("addBtn");
     if (addBtn && p.stock > 0) {
       addBtn.onclick = () => {
-        Cart.add(p, qty());
-        UI.toast(
-          lang === "ar" ? `أُضيف ${qty()} × "${p.nameAr}" إلى السلة` : `${qty()} × "${p.nameEn}" added`,
-          "success"
-        );
-        addBtn.textContent = lang === "ar" ? "✓ أُضيف" : "✓ Added";
-        setTimeout(() => { addBtn.textContent = lang === "ar" ? "أضف إلى السلة" : "Add to cart"; }, 1200);
+        const success = Cart.add(p, qty());
+        if (success !== false) {
+          UI.toast(
+            lang === "ar" ? `أُضيف ${qty()} × "${p.nameAr}" إلى السلة` : `${qty()} × "${p.nameEn}" added`,
+            "success"
+          );
+          addBtn.textContent = lang === "ar" ? "✓ أُضيف" : "✓ Added";
+          setTimeout(() => { addBtn.textContent = lang === "ar" ? "أضف إلى السلة" : "Add to cart"; }, 1200);
+        }
       };
     }
 
@@ -126,8 +129,8 @@ UI.init({
           { icon: "🛒", okLabel: lang === "ar" ? "متابعة" : "Continue" }
         );
         if (ok) {
-          Cart.add(p, qty());
-          location.href = "checkout.html";
+          const success = Cart.add(p, qty());
+          if (success !== false) location.href = "checkout.html";
         }
       };
     }
@@ -167,17 +170,5 @@ UI.init({
   }
 });
 </script>
-<script src="js/design-tokens.js"></script>
-<script src="js/config.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/wishlist.js"></script>
-<script src="js/notifications.js"></script>
-<script src="js/shipping.js"></script>
-<script src="js/coupons.js"></script>
-<script src="js/tracking.js"></script>
-<script src="js/store.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/aurora.js"></script>
-<script src="js/ui.js"></script>
 </body>
 </html>
