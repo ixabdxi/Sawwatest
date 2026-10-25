@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/alerts.css" />
 <link rel="stylesheet" href="css/rtl.css" />
+<link rel="stylesheet" href="css/mobile.css" />
 
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <meta name="theme-color" content="#0A3D38" />
@@ -226,13 +227,15 @@ UI.init({
       ev.preventDefault();
       const prod = Store.products.byId(b.dataset.id);
       if (prod) {
-        Cart.add(prod, 1);
-        UI.toast(
-          lang === "ar" ? `أُضيف "${prod.nameAr}" إلى السلة` : `"${prod.nameEn}" added to cart`,
-          "success"
-        );
-        b.textContent = lang === "ar" ? "✓ أُضيف" : "✓ Added";
-        setTimeout(() => { b.textContent = lang === "ar" ? "أضف إلى السلة" : "Add to cart"; }, 1100);
+        const success = Cart.add(prod, 1);
+        if (success !== false) {
+          UI.toast(
+            lang === "ar" ? `أُضيف "${prod.nameAr}" إلى السلة` : `"${prod.nameEn}" added to cart`,
+            "success"
+          );
+          b.textContent = lang === "ar" ? "✓ أُضيف" : "✓ Added";
+          setTimeout(() => { b.textContent = lang === "ar" ? "أضف إلى السلة" : "Add to cart"; }, 1100);
+        }
       }
     });
 
@@ -266,7 +269,6 @@ UI.init({
 });
 </script>
 <script>
-  // كشف Supabase على الصفحة الرئيسية
   setTimeout(() => {
     if (window.SB && SB.isEnabled && SB.isEnabled()) {
       SB.init().then((c) => {
