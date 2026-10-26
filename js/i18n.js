@@ -13,10 +13,11 @@ window.I18N = {
     "home.rubber": "ماوس باد مطاطي",
     "home.glass": "ماوس باد زجاجي",
     "home.reviews": "آراء العملاء",
-    "features.shipping": "شحن 3 دنانير لكل الأردن",
-    "features.cod": "الدفع عند الاستلام",
+    "features.shipping": "شحن لكل الأردن",
+    "features.cod": "الدفع عند التوصيل",
     "features.cliq": "دفع Cliq",
     "features.warranty": "ضمان الجودة",
+    "features.payWith": "ادفع بـ",
     "product.addToCart": "أضف إلى السلة",
     "product.buyNow": "اشترِ الآن",
     "product.outOfStock": "نفد المخزون",
@@ -45,21 +46,10 @@ window.I18N = {
     "checkout.notes": "ملاحظات (اختياري)",
     "checkout.payment": "طريقة الدفع",
     "checkout.cod": "الدفع عند الاستلام",
-    "checkout.cliq": "دفع Cliq",
-    "checkout.paypal": "الدفع بالبطاقة / PayPal",
-    "checkout.cliqId": "معرّف Cliq",
-    "checkout.cliqInstructions": "حوّل المبلغ إلى المعرّف ثم ارفع صورة الإشعار.",
-    "checkout.proof": "صورة إشعار التحويل",
+    "checkout.payOnline": "الدفع بالبطاقة أو PayPal",
     "checkout.placeOrder": "تأكيد الطلب",
     "checkout.points": "استخدم نقاطك",
     "checkout.pointsHint": "100 نقطة = 1 دينار خصم",
-    "checkout.cliqEnabled": "✓ دفع Cliq مُفعّل",
-    "checkout.cliqNoProof": "— لم يتم رفع إشعار —",
-    "checkout.cliqEdit": "تعديل",
-    "checkout.cliqModalTitle": "دفع Cliq",
-    "checkout.cliqAmount": "المبلغ المطلوب",
-    "checkout.cliqConfirm": "تأكيد الدفع",
-    "checkout.cliqCancel": "إلغاء",
     "checkout.couponPlaceholder": "كود الخصم",
     "checkout.couponApply": "تطبيق",
     "checkout.couponCode": "كود الخصم",
@@ -87,7 +77,7 @@ window.I18N = {
     "track.title": "تتبع الطلب",
     "track.orderId": "رقم الطلب",
     "track.btn": "تتبع",
-    "track.notFound": "لم نجد هذا الطلب. تأكد من الرقم أو تواصل معنا عبر واتساب.",
+    "track.notFound": "لم نجد هذا الطلب. تأكد من الرقم أو تواصل معنا.",
     "track.wa": "واتساب",
     "track.name": "الاسم",
     "track.city": "المدينة",
@@ -97,8 +87,6 @@ window.I18N = {
     "contact.title": "اتصل بنا",
     "about.title": "من نحن",
     "policy.title": "سياسة الاستبدال والضمان"
-        "features.cod": "الدفع عند التوصيل",
-    "features.payWith": "ادفع بـ",
   },
   en: {
     "nav.home": "Home",
@@ -107,17 +95,18 @@ window.I18N = {
     "nav.account": "Account",
     "nav.about": "About",
     "nav.admin": "Admin",
-    "nav.track": "Track Order",
+    "nav.track": "Track",
     "hero.tagline": "Quality you deserve, price you love.",
     "hero.cta": "Shop now",
     "home.featured": "Featured",
     "home.rubber": "Rubber Mousepads",
     "home.glass": "Glass Mousepads",
     "home.reviews": "Customer Reviews",
-    "features.shipping": "3 JOD flat shipping across Jordan",
-    "features.cod": "Cash on delivery",
-    "features.cliq": "Cliq payment",
-    "features.warranty": "Quality guarantee",
+    "features.shipping": "Shipping across Jordan",
+    "features.cod": "Cash on Delivery",
+    "features.cliq": "Cliq Payment",
+    "features.warranty": "Warranty",
+    "features.payWith": "Pay with",
     "product.addToCart": "Add to cart",
     "product.buyNow": "Buy now",
     "product.outOfStock": "Out of stock",
@@ -145,22 +134,11 @@ window.I18N = {
     "checkout.address": "Detailed address",
     "checkout.notes": "Notes (optional)",
     "checkout.payment": "Payment method",
-    "checkout.cod": "Cash on delivery",
-    "checkout.cliq": "Cliq payment",
-    "checkout.paypal": "Card / PayPal",
-    "checkout.cliqId": "Cliq ID",
-    "checkout.cliqInstructions": "Transfer the amount to the ID below, then upload the receipt.",
-    "checkout.proof": "Receipt screenshot",
+    "checkout.cod": "Cash on Delivery",
+    "checkout.payOnline": "Pay by Card or PayPal",
     "checkout.placeOrder": "Place order",
     "checkout.points": "Use your points",
     "checkout.pointsHint": "100 points = 1 JOD discount",
-    "checkout.cliqEnabled": "✓ Cliq payment enabled",
-    "checkout.cliqNoProof": "— No receipt uploaded —",
-    "checkout.cliqEdit": "Edit",
-    "checkout.cliqModalTitle": "Cliq Payment",
-    "checkout.cliqAmount": "Amount required",
-    "checkout.cliqConfirm": "Confirm Payment",
-    "checkout.cliqCancel": "Cancel",
     "checkout.couponPlaceholder": "Coupon code",
     "checkout.couponApply": "Apply",
     "checkout.couponCode": "Coupon",
@@ -198,18 +176,17 @@ window.I18N = {
     "contact.title": "Contact",
     "about.title": "About Us",
     "policy.title": "Return & Warranty Policy"
-      "features.cod": "Cash on Delivery",
-    "features.payWith": "Pay with",
   }
 };
 
 window.t = (key) => {
-  const lang = window.SAWWA.lang || "ar";
+  const lang = window.SAWWA?.lang || "ar";
   return (window.I18N[lang] && window.I18N[lang][key]) || key;
 };
 
 window.setLang = (lang) => {
   localStorage.setItem("sawwa_lang", lang);
+  if(!window.SAWWA) window.SAWWA = {};
   window.SAWWA.lang = lang;
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
