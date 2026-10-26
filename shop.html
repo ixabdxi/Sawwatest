@@ -19,7 +19,7 @@
 <div id="grain"></div>
 
 <main class="container">
-  <h1 class="page-title font-en">Shop</h1>
+  <h1 class="page-title font-en" data-i18n="nav.shop"></h1>
   <div class="filters">
     <button class="chip active" data-filter="all">All</button>
     <button class="chip" data-filter="RUBBER" data-i18n="home.rubber"></button>
@@ -59,12 +59,12 @@ UI.init({
                 ${onSale ? `<span class="price-old">${UI.fmt(p.compareAtPrice)}</span>` : ""}
                 <span class="price">${UI.fmt(p.price)}</span>
               </div>
-              ${p.stock <= 0 ? `<div class="badge-out">${lang === 'ar' ? 'نفد المخزون' : 'Out of stock'}</div>` : ""}
+              ${p.stock <= 0 ? `<div class="badge-out">${t('product.outOfStock')}</div>` : ""}
             </div>
           </a>
           <div class="card-actions">
             <button class="btn primary full add-btn" data-id="${p.id}" ${p.stock <= 0 ? "disabled" : ""}>
-              ${p.stock <= 0 ? (lang === 'ar' ? 'نفد المخزون' : 'Out of stock') : (lang === 'ar' ? 'أضف إلى السلة' : 'Add to cart')}
+              ${p.stock <= 0 ? t('product.outOfStock') : t('product.addToCart')}
             </button>
           </div>
         </div>`;
@@ -80,7 +80,7 @@ UI.init({
               "success"
             );
             b.textContent = lang === "ar" ? "✓ أُضيف" : "✓ Added";
-            setTimeout(() => { b.textContent = lang === "ar" ? "أضف إلى السلة" : "Add to cart"; }, 1100);
+            setTimeout(() => { b.textContent = t('product.addToCart'); }, 1100);
           }
         }
       });
