@@ -11,465 +11,135 @@
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/alerts.css" />
 <link rel="stylesheet" href="css/rtl.css" />
+<link rel="stylesheet" href="css/mobile.css" />
 <style>
-  /* ============ PANEL LAYOUT ============ */
   body.design-body { background: var(--bg); }
   body.design-body::before { display: none; }
 
-  .dp-app {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    min-height: 100vh;
-  }
+  .dp-app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
   .dp-side {
-    background: var(--deep);
-    color: #fff;
-    overflow-y: auto;
-    padding: 20px 0;
-    position: sticky; top: 0;
-    height: 100vh;
-    display: flex; flex-direction: column;
+    background: var(--deep); color: #fff; overflow-y: auto; padding: 20px 0;
+    position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column;
   }
-  .dp-side-head {
-    padding: 0 22px 22px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .dp-side-head { padding: 0 22px 22px; display: flex; align-items: center; justify-content: space-between; }
   .dp-side-head img { height: 40px; }
-  .dp-side-head .dp-close {
-    background: none; border: none; color: #fff;
-    font-size: 22px; cursor: pointer; display: none;
-  }
+  .dp-side-head .dp-close { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; display: none; }
   .dp-tabs { display: flex; flex-direction: column; gap: 3px; padding: 0 12px; flex: 1; }
   .dp-tab {
-    display: flex; align-items: center; gap: 12px;
-    padding: 11px 14px;
-    border-radius: 10px;
-    border: none;
-    background: transparent;
-    color: rgba(255,255,255,.75);
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 13px; font-weight: 600;
-    text-align: start;
-    transition: all .2s;
+    display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px;
+    border: none; background: transparent; color: rgba(255,255,255,.75); cursor: pointer;
+    font-family: inherit; font-size: 13px; font-weight: 600; text-align: start; transition: all .2s;
   }
   .dp-tab:hover { background: rgba(255,255,255,.08); color: #fff; }
-  .dp-tab.active {
-    background: linear-gradient(135deg, #12A89B, #5FD0C5);
-    color: #fff;
-    box-shadow: 0 8px 20px rgba(18,168,155,.4);
-  }
+  .dp-tab.active { background: linear-gradient(135deg, #12A89B, #5FD0C5); color: #fff; box-shadow: 0 8px 20px rgba(18,168,155,.4); }
   .dp-tab .dp-tab-ico { font-size: 16px; width: 20px; text-align: center; }
-  .dp-side-foot {
-    padding: 16px 20px 0;
-    border-top: 1px solid rgba(255,255,255,.12);
-    margin-top: 16px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .dp-side-foot .btn {
-    background: rgba(255,255,255,.08);
-    border-color: rgba(255,255,255,.15);
-    color: #fff;
-    justify-content: center;
-  }
+  .dp-side-foot { padding: 16px 20px 0; border-top: 1px solid rgba(255,255,255,.12); margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .dp-side-foot .btn { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); color: #fff; justify-content: center; }
   .dp-side-foot .btn:hover { background: rgba(255,255,255,.18); }
 
   .dp-main { min-width: 0; }
   .dp-top {
-    position: sticky; top: 0; z-index: 20;
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 14px 26px;
-    display: flex; align-items: center; gap: 16px;
-    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 14px 26px;
+    display: flex; align-items: center; gap: 16px; border-bottom: 1px solid var(--line);
   }
-  .dp-menu-toggle {
-    display: none;
-    background: none; border: none;
-    font-size: 22px; cursor: pointer; color: var(--ink);
-  }
+  .dp-menu-toggle { display: none; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--ink); }
   .dp-title { font-size: 18px; font-weight: 900; color: var(--deep); flex: 1; }
   html.dark .dp-title { color: var(--cyan); }
   .dp-top-actions { display: flex; gap: 8px; align-items: center; }
   .dp-status {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 11px; font-weight: 700;
-    background: color-mix(in srgb, #2E7D32 15%, transparent);
-    color: #2E7D32;
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; background: color-mix(in srgb, #2E7D32 15%, transparent); color: #2E7D32;
   }
-  .dp-status::before {
-    content: "";
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #2E7D32;
-    animation: dpPulse 1.5s ease-in-out infinite;
-  }
-  @keyframes dpPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .4; }
-  }
+  .dp-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #2E7D32; animation: dpPulse 1.5s ease-in-out infinite; }
+  @keyframes dpPulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
 
   .dp-content { padding: 26px 30px 80px; max-width: 1100px; }
   .dp-panel { display: none; }
   .dp-panel.active { display: block; animation: dpFade .3s ease; }
-  @keyframes dpFade {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes dpFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ============ FORM CONTROLS ============ */
-  .dp-group {
-    background: var(--white);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 24px 26px;
-    margin-bottom: 20px;
-  }
-  .dp-group h3 {
-    font-size: 14px;
-    font-weight: 900;
-    color: var(--deep);
-    margin-bottom: 6px;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    font-family: "Orbitron", sans-serif;
-  }
+  .dp-group { background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 24px 26px; margin-bottom: 20px; }
+  .dp-group h3 { font-size: 14px; font-weight: 900; color: var(--deep); margin-bottom: 6px; letter-spacing: .04em; text-transform: uppercase; font-family: "Orbitron", sans-serif; }
   html.dark .dp-group h3 { color: var(--cyan); }
-  .dp-group p.dp-help {
-    font-size: 12px; color: var(--muted);
-    margin-bottom: 20px; line-height: 1.6;
-  }
-  .dp-group p.dp-help code {
-    background: var(--paper-2);
-    padding: 2px 6px; border-radius: 4px;
-    font-family: monospace;
-    font-size: 11px;
-  }
+  .dp-group p.dp-help { font-size: 12px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+  .dp-group p.dp-help code { background: var(--paper-2); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 11px; }
 
-  .dp-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
-    margin-bottom: 16px;
-  }
+  .dp-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 16px; }
   .dp-field { display: block; }
-  .dp-field > span {
-    display: block;
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--deep);
-    margin-bottom: 8px;
-    letter-spacing: .03em;
-  }
+  .dp-field > span { display: block; font-size: 12px; font-weight: 800; color: var(--deep); margin-bottom: 8px; letter-spacing: .03em; }
   html.dark .dp-field > span { color: var(--ink); }
-  .dp-field > span small {
-    font-weight: 500;
-    color: var(--muted);
-    font-size: 11px;
-    margin-inline-start: 6px;
+  .dp-field > span small { font-weight: 500; color: var(--muted); font-size: 11px; margin-inline-start: 6px; }
+  .dp-field input[type=text], .dp-field input[type=number], .dp-field input[type=email], .dp-field input[type=password], .dp-field input[type=url], .dp-field textarea, .dp-field select {
+    width: 100%; padding: 11px 14px; border-radius: 10px; border: 1.5px solid var(--line);
+    background: var(--paper); color: var(--ink); font-family: inherit; font-size: 14px; font-weight: 500; transition: all .2s;
   }
-  .dp-field input[type=text],
-  .dp-field input[type=number],
-  .dp-field input[type=email],
-  .dp-field input[type=password],
-  .dp-field input[type=url],
-  .dp-field textarea,
-  .dp-field select {
-    width: 100%;
-    padding: 11px 14px;
-    border-radius: 10px;
-    border: 1.5px solid var(--line);
-    background: var(--paper);
-    color: var(--ink);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all .2s;
-  }
-  html.dark .dp-field input,
-  html.dark .dp-field textarea,
-  html.dark .dp-field select {
-    background: var(--paper-2);
-  }
-  .dp-field input:focus,
-  .dp-field textarea:focus,
-  .dp-field select:focus {
-    outline: none;
-    border-color: var(--teal-2);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal-2) 15%, transparent);
-  }
+  html.dark .dp-field input, html.dark .dp-field textarea, html.dark .dp-field select { background: var(--paper-2); }
+  .dp-field input:focus, .dp-field textarea:focus, .dp-field select:focus { outline: none; border-color: var(--teal-2); box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal-2) 15%, transparent); }
 
-  .dp-field.color-field {
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 8px;
-    align-items: center;
-  }
-  .dp-field.color-field input[type=color] {
-    width: 44px; height: 44px;
-    padding: 0; border: 1.5px solid var(--line);
-    border-radius: 10px; cursor: pointer;
-    background: transparent;
-  }
-  .dp-field.color-field input[type=text] {
-    font-family: "Orbitron", monospace;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    font-size: 13px;
-  }
+  .dp-field.color-field { display: grid; grid-template-columns: 44px 1fr; gap: 8px; align-items: center; }
+  .dp-field.color-field input[type=color] { width: 44px; height: 44px; padding: 0; border: 1.5px solid var(--line); border-radius: 10px; cursor: pointer; background: transparent; }
+  .dp-field.color-field input[type=text] { font-family: "Orbitron", monospace; letter-spacing: .04em; text-transform: uppercase; font-size: 13px; }
 
-  .dp-toggle {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: var(--paper);
-    border: 1.5px solid var(--line);
-    cursor: pointer;
-    transition: all .2s;
-    font-size: 13px; font-weight: 700;
-    color: var(--ink);
-  }
+  .dp-toggle { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; background: var(--paper); border: 1.5px solid var(--line); cursor: pointer; transition: all .2s; font-size: 13px; font-weight: 700; color: var(--ink); }
   html.dark .dp-toggle { background: var(--paper-2); }
   .dp-toggle:hover { border-color: var(--teal-2); }
   .dp-toggle input { display: none; }
-  .dp-toggle .switch {
-    width: 40px; height: 22px;
-    background: var(--line);
-    border-radius: 999px;
-    position: relative;
-    transition: background .2s;
-    flex-shrink: 0;
-  }
-  .dp-toggle .switch::after {
-    content: "";
-    position: absolute;
-    top: 2px; inset-inline-start: 2px;
-    width: 18px; height: 18px;
-    background: #fff;
-    border-radius: 50%;
-    transition: transform .2s;
-    box-shadow: 0 2px 4px rgba(0,0,0,.15);
-  }
-  .dp-toggle input:checked + .switch {
-    background: var(--teal-2);
-  }
-  .dp-toggle input:checked + .switch::after {
-    transform: translateX(18px);
-  }
-  [dir="rtl"] .dp-toggle input:checked + .switch::after {
-    transform: translateX(-18px);
-  }
+  .dp-toggle .switch { width: 40px; height: 22px; background: var(--line); border-radius: 999px; position: relative; transition: background .2s; flex-shrink: 0; }
+  .dp-toggle .switch::after { content: ""; position: absolute; top: 2px; inset-inline-start: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .2s; box-shadow: 0 2px 4px rgba(0,0,0,.15); }
+  .dp-toggle input:checked + .switch { background: var(--teal-2); }
+  .dp-toggle input:checked + .switch::after { transform: translateX(18px); }
+  [dir="rtl"] .dp-toggle input:checked + .switch::after { transform: translateX(-18px); }
 
-  .dp-range-row {
-    display: grid;
-    grid-template-columns: 1fr 60px;
-    gap: 12px;
-    align-items: center;
-  }
-  .dp-range-row input[type=range] {
-    width: 100%;
-    accent-color: var(--teal-2);
-  }
-  .dp-range-row .dp-range-val {
-    font-family: "Orbitron", monospace;
-    font-size: 12px;
-    font-weight: 800;
-    text-align: center;
-    padding: 6px 8px;
-    background: var(--paper-2);
-    border-radius: 6px;
-    color: var(--teal);
-  }
+  .dp-range-row { display: grid; grid-template-columns: 1fr 60px; gap: 12px; align-items: center; }
+  .dp-range-row input[type=range] { width: 100%; accent-color: var(--teal-2); }
+  .dp-range-row .dp-range-val { font-family: "Orbitron", monospace; font-size: 12px; font-weight: 800; text-align: center; padding: 6px 8px; background: var(--paper-2); border-radius: 6px; color: var(--teal); }
 
-  .dp-img-picker {
-    border: 2px dashed var(--line);
-    border-radius: 14px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all .2s;
-    background: var(--paper);
-  }
+  .dp-img-picker { border: 2px dashed var(--line); border-radius: 14px; padding: 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--paper); }
   html.dark .dp-img-picker { background: var(--paper-2); }
-  .dp-img-picker:hover {
-    border-color: var(--teal-2);
-    background: color-mix(in srgb, var(--teal-2) 6%, transparent);
-  }
-  .dp-img-picker .dp-prev {
-    min-height: 120px;
-    display: grid; place-items: center;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    overflow: hidden;
-    background: var(--white);
-  }
-  .dp-img-picker .dp-prev img {
-    max-width: 100%;
-    max-height: 200px;
-    object-fit: contain;
-    display: block;
-  }
-  .dp-img-picker .dp-prev.empty::after {
-    content: "لا صورة — اضغط للاختيار";
-    color: var(--muted);
-    font-size: 12px;
-  }
-  .dp-img-picker .dp-meta {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .dp-img-picker .dp-meta strong {
-    display: block;
-    color: var(--ink);
-    font-size: 13px;
-    margin-bottom: 4px;
-  }
+  .dp-img-picker:hover { border-color: var(--teal-2); background: color-mix(in srgb, var(--teal-2) 6%, transparent); }
+  .dp-img-picker .dp-prev { min-height: 120px; display: grid; place-items: center; margin-bottom: 12px; border-radius: 8px; overflow: hidden; background: var(--white); }
+  .dp-img-picker .dp-prev img { max-width: 100%; max-height: 200px; object-fit: contain; display: block; }
+  .dp-img-picker .dp-prev.empty::after { content: "لا صورة — اضغط للاختيار"; color: var(--muted); font-size: 12px; }
+  .dp-img-picker .dp-meta { font-size: 12px; color: var(--muted); }
+  .dp-img-picker .dp-meta strong { display: block; color: var(--ink); font-size: 13px; margin-bottom: 4px; }
 
-  .dp-list {
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .dp-list-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px;
-    background: var(--paper);
-    border: 1.5px solid var(--line);
-    border-radius: 10px;
-    font-size: 13px;
-  }
+  .dp-list { display: flex; flex-direction: column; gap: 8px; }
+  .dp-list-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; font-size: 13px; }
   html.dark .dp-list-item { background: var(--paper-2); }
-  .dp-list-item .grip {
-    cursor: grab;
-    color: var(--muted);
-    font-size: 16px;
-    user-select: none;
-  }
+  .dp-list-item .grip { cursor: grab; color: var(--muted); font-size: 16px; user-select: none; }
   .dp-list-item .label { flex: 1; font-weight: 700; color: var(--ink); }
   .dp-list-item .actions { display: flex; gap: 6px; }
 
-  .dp-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: 1.5px solid var(--line);
-    background: var(--white);
-    color: var(--ink);
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all .2s;
-  }
+  .dp-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--white); color: var(--ink); font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s; }
   html.dark .dp-btn { background: var(--paper-2); }
   .dp-btn:hover { border-color: var(--teal-2); color: var(--teal); }
-  .dp-btn.primary {
-    background: linear-gradient(135deg, #12A89B, #0F5C56);
-    color: #fff;
-    border-color: transparent;
-  }
+  .dp-btn.primary { background: linear-gradient(135deg, #12A89B, #0F5C56); color: #fff; border-color: transparent; }
   .dp-btn.primary:hover { box-shadow: 0 8px 20px rgba(18,168,155,.4); }
   .dp-btn.danger { color: #C03030; border-color: #C03030; }
   .dp-btn.danger:hover { background: #C03030; color: #fff; }
 
-  .dp-actions-bar {
-    display: flex; gap: 10px; flex-wrap: wrap;
-    padding: 20px 0;
-    margin-top: 24px;
-    border-top: 1.5px solid var(--line);
-    position: sticky; bottom: 0;
-    background: color-mix(in srgb, var(--bg) 95%, transparent);
-    backdrop-filter: blur(10px);
-    margin-inline: -30px;
-    padding-inline: 30px;
-    z-index: 10;
-  }
+  .dp-actions-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 20px 0; margin-top: 24px; border-top: 1.5px solid var(--line); position: sticky; bottom: 0; background: color-mix(in srgb, var(--bg) 95%, transparent); backdrop-filter: blur(10px); margin-inline: -30px; padding-inline: 30px; z-index: 10; }
 
-  .dp-preset-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 14px;
-  }
-  .dp-preset {
-    padding: 16px;
-    border-radius: 12px;
-    border: 1.5px solid var(--line);
-    background: var(--white);
-    cursor: pointer;
-    transition: all .25s;
-    text-align: center;
-  }
+  .dp-preset-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+  .dp-preset { padding: 16px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--white); cursor: pointer; transition: all .25s; text-align: center; }
   html.dark .dp-preset { background: var(--paper-2); }
-  .dp-preset:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgba(0,0,0,.08);
-    border-color: var(--teal-2);
-  }
-  .dp-preset .swatch {
-    height: 60px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    overflow: hidden;
-  }
+  .dp-preset:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.08); border-color: var(--teal-2); }
+  .dp-preset .swatch { height: 60px; border-radius: 8px; margin-bottom: 12px; display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden; }
   .dp-preset .swatch span { display: block; }
-  .dp-preset strong {
-    display: block;
-    font-size: 13px;
-    color: var(--ink);
-    margin-bottom: 2px;
-  }
-  .dp-preset small {
-    font-size: 11px;
-    color: var(--muted);
-  }
+  .dp-preset strong { display: block; font-size: 13px; color: var(--ink); margin-bottom: 2px; }
+  .dp-preset small { font-size: 11px; color: var(--muted); }
 
-  /* ============ CODE EDITOR ============ */
-  .dp-code {
-    font-family: "JetBrains Mono", Consolas, monospace;
-    font-size: 13px;
-    line-height: 1.6;
-    background: #0B1A18;
-    color: #E8EFED;
-    border: none;
-    border-radius: 10px;
-    padding: 16px;
-    min-height: 180px;
-    resize: vertical;
-    width: 100%;
-    tab-size: 2;
-  }
+  .dp-code { font-family: "JetBrains Mono", Consolas, monospace; font-size: 13px; line-height: 1.6; background: #0B1A18; color: #E8EFED; border: none; border-radius: 10px; padding: 16px; min-height: 180px; resize: vertical; width: 100%; tab-size: 2; }
   .dp-code:focus { outline: none; box-shadow: 0 0 0 3px rgba(18,168,155,.3); }
 
-  /* ============ HISTORY ============ */
-  .dp-history-item {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 12px;
-    align-items: center;
-    padding: 12px 14px;
-    background: var(--paper);
-    border-radius: 10px;
-    margin-bottom: 8px;
-    font-size: 13px;
-  }
+  .dp-history-item { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 12px 14px; background: var(--paper); border-radius: 10px; margin-bottom: 8px; font-size: 13px; }
   html.dark .dp-history-item { background: var(--paper-2); }
-  .dp-history-item .time {
-    font-family: "Orbitron", monospace;
-    font-size: 11px;
-    color: var(--muted);
-  }
+  .dp-history-item .time { font-family: "Orbitron", monospace; font-size: 11px; color: var(--muted); }
 
-  /* ============ MOBILE ============ */
   @media (max-width: 900px) {
     .dp-app { grid-template-columns: 1fr; }
-    .dp-side {
-      position: fixed; top: 0; inset-inline-start: 0;
-      width: 260px; transform: translateX(-100%);
-      transition: transform .3s;
-      z-index: 100;
-    }
+    .dp-side { position: fixed; top: 0; inset-inline-start: 0; width: 260px; transform: translateX(-100%); transition: transform .3s; z-index: 100; }
     [dir="rtl"] .dp-side { transform: translateX(100%); }
     .dp-side.open { transform: translateX(0) !important; box-shadow: 0 0 80px rgba(0,0,0,.4); }
     .dp-side-head .dp-close { display: block; }
@@ -521,7 +191,6 @@
     </header>
 
     <div class="dp-content">
-      <!-- ============ IDENTITY ============ -->
       <section class="dp-panel active" id="dp-identity">
         <div class="dp-group">
           <h3>اسم المتجر</h3>
@@ -565,7 +234,6 @@
         </div>
       </section>
 
-      <!-- ============ COLORS ============ -->
       <section class="dp-panel" id="dp-colors">
         <div class="dp-group">
           <h3>Presets جاهزة</h3>
@@ -595,7 +263,6 @@
         </div>
       </section>
 
-      <!-- ============ TYPOGRAPHY ============ -->
       <section class="dp-panel" id="dp-typography">
         <div class="dp-group">
           <h3>الخطوط</h3>
@@ -667,7 +334,6 @@
         </div>
       </section>
 
-      <!-- ============ EFFECTS ============ -->
       <section class="dp-panel" id="dp-effects">
         <div class="dp-group">
           <h3>Aurora Background</h3>
@@ -731,7 +397,6 @@
         </div>
       </section>
 
-      <!-- ============ ANIMATION ============ -->
       <section class="dp-panel" id="dp-animation">
         <div class="dp-group">
           <h3>الحركات العامة</h3>
@@ -807,7 +472,6 @@
         </div>
       </section>
 
-      <!-- ============ LAYOUT ============ -->
       <section class="dp-panel" id="dp-layout">
         <div class="dp-group">
           <h3>شبكة المنتجات</h3>
@@ -875,7 +539,6 @@
         </div>
       </section>
 
-      <!-- ============ COMPONENTS ============ -->
       <section class="dp-panel" id="dp-components">
         <div class="dp-group">
           <h3>الأزرار</h3>
@@ -944,7 +607,6 @@
         </div>
       </section>
 
-      <!-- ============ IMAGES ============ -->
       <section class="dp-panel" id="dp-images">
         <div class="dp-group">
           <h3>صور Hero Slider</h3>
@@ -972,7 +634,6 @@
         </div>
       </section>
 
-      <!-- ============ SECTIONS ============ -->
       <section class="dp-panel" id="dp-sections">
         <div class="dp-group">
           <h3>ترتيب وإخفاء الأقسام</h3>
@@ -988,7 +649,6 @@
         </div>
       </section>
 
-      <!-- ============ CONTENT ============ -->
       <section class="dp-panel" id="dp-content">
         <div class="dp-group">
           <h3>نصوص Hero</h3>
@@ -1017,7 +677,6 @@
         </div>
       </section>
 
-      <!-- ============ ANALYTICS ============ -->
       <section class="dp-panel" id="dp-analytics">
         <div class="dp-group">
           <h3>معرّفات التحليلات</h3>
@@ -1037,7 +696,6 @@
         </div>
       </section>
 
-      <!-- ============ CUSTOM CSS ============ -->
       <section class="dp-panel" id="dp-custom">
         <div class="dp-group">
           <h3>CSS مخصص</h3>
@@ -1062,7 +720,6 @@
         </div>
       </section>
 
-      <!-- ============ PRESETS ============ -->
       <section class="dp-panel" id="dp-presets">
         <div class="dp-group">
           <h3>Presets جاهزة</h3>
@@ -1071,7 +728,6 @@
         </div>
       </section>
 
-      <!-- ============ HISTORY ============ -->
       <section class="dp-panel" id="dp-history">
         <div class="dp-group">
           <h3>آخر 20 تعديل</h3>
@@ -1080,7 +736,6 @@
         </div>
       </section>
 
-      <!-- ============ BACKUP ============ -->
       <section class="dp-panel" id="dp-backup">
         <div class="dp-group">
           <h3>تصدير</h3>
@@ -1104,7 +759,6 @@
         </div>
       </section>
 
-      <!-- ============ ACTIONS BAR ============ -->
       <div class="dp-actions-bar">
         <button class="dp-btn primary" id="dpSave">💾 حفظ التغييرات</button>
         <button class="dp-btn" id="dpPreview">👁️ معاينة</button>
