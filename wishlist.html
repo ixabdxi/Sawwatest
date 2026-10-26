@@ -19,7 +19,7 @@
 <div id="grain"></div>
 
 <main class="container">
-  <h1 class="page-title font-en">Wishlist</h1>
+  <h1 class="page-title font-en" data-i18n="wishlist.title"></h1>
   <div id="wishWrap"></div>
 </main>
 
@@ -44,8 +44,8 @@ UI.init({
         wrap.innerHTML = `
           <div class="wish-empty">
             <div class="big-heart">♡</div>
-            <p class="muted">${lang === "ar" ? "قائمة الرغبات فارغة." : "Your wishlist is empty."}</p>
-            <a href="shop.html" class="btn primary">${lang === "ar" ? "تسوّق الآن" : "Shop now"}</a>
+            <p class="muted">${t('wishlist.empty')}</p>
+            <a href="shop.html" class="btn primary">${t('cart.shopNow')}</a>
           </div>`;
         return;
       }
@@ -68,7 +68,7 @@ UI.init({
               </div>
             </a>
             <div class="card-actions" style="display:flex;gap:8px">
-              <button class="btn primary full wish-cart" data-id="${it.id}">${lang === "ar" ? "أضف للسلة" : "Add to cart"}</button>
+              <button class="btn primary full wish-cart" data-id="${it.id}">${t('wishlist.add')}</button>
               <button class="btn ghost wish-rm" data-id="${it.id}" title="${lang === "ar" ? "إزالة" : "Remove"}">✕</button>
             </div>
           </div>`;
