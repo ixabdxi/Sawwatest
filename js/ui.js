@@ -129,7 +129,7 @@ window.UI = (() => {
     });
   };
 
-  /* ============ COUNTDOWN TIMER (FIXED) ============ */
+  /* ============ COUNTDOWN TIMER ============ */
   const initCountdown = () => {
     const prodWrap = document.getElementById("productWrap");
     const cartWrap = document.getElementById("cartWrap");
@@ -138,7 +138,6 @@ window.UI = (() => {
     if (prodWrap) targetElement = prodWrap;
     else if (cartWrap) targetElement = cartWrap;
 
-    // إذا لم نجد العنصر، نخرج من الدالة بأمان بدون إحداث أخطاء
     if (!targetElement || !targetElement.parentNode) return;
 
     const timerEl = el("div", "countdown-timer");
@@ -185,7 +184,6 @@ window.UI = (() => {
     setInterval(tick, 1000);
   };
 
-  /* ============ NOTIFICATIONS BELL ============ */
   const openNotifPanel = () => {
     const existing = document.getElementById("notifPanel");
     if (existing) { existing.remove(); return; }
@@ -272,7 +270,7 @@ window.UI = (() => {
     h.querySelector("#langToggle").onclick = () => {
       const next = window.SAWWA.lang === "ar" ? "en" : "ar";
       window.setLang(next);
-      location.reload(); // إعادة تحميل لضمان ترجمة المنتجات
+      location.reload(); 
     };
     h.querySelector("#themeToggle").onclick = () => window.toggleTheme();
     h.querySelector("#notifBtn").onclick = (e) => { e.stopPropagation(); openNotifPanel(); };
