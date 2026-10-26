@@ -164,16 +164,16 @@
         </label>
         <label class="radio">
           <input type="radio" name="pay" value="PAYPAL" />
-          <span>الدفع بالبطاقة / PayPal</span>
+          <span data-i18n="checkout.paypal"></span>
         </label>
       </fieldset>
 
       <div id="cliqSummary" class="cliq-summary" hidden>
         <div class="cs-row">
-          <span class="cs-label">✓ دفع Cliq مُفعّل</span>
-          <button type="button" class="cs-edit" id="cliqEdit">تعديل</button>
+          <span class="cs-label" data-i18n="checkout.cliqEnabled"></span>
+          <button type="button" class="cs-edit" id="cliqEdit" data-i18n="checkout.cliqEdit"></button>
         </div>
-        <div class="cs-file" id="cliqFileName">— لم يتم رفع إشعار —</div>
+        <div class="cs-file" id="cliqFileName" data-i18n="checkout.cliqNoProof"></div>
       </div>
 
       <label class="points-box">
@@ -189,14 +189,14 @@
       <div id="summaryItems"></div>
 
       <div class="coupon-row">
-        <input type="text" id="couponInput" placeholder="كود الخصم" />
-        <button type="button" class="btn ghost" id="couponApply">تطبيق</button>
+        <input type="text" id="couponInput" data-i18n-ph="checkout.couponPlaceholder" />
+        <button type="button" class="btn ghost" id="couponApply" data-i18n="checkout.couponApply"></button>
       </div>
       <div id="couponStatus"></div>
 
       <div class="row"><span data-i18n="cart.subtotal"></span><span id="sumSub"></span></div>
       <div class="row" id="discountRow" style="display:none"><span data-i18n="checkout.points"></span><span id="sumDisc"></span></div>
-      <div class="row" id="couponRow" style="display:none"><span>كود الخصم</span><span id="sumCoupon"></span></div>
+      <div class="row" id="couponRow" style="display:none"><span data-i18n="checkout.couponCode"></span><span id="sumCoupon"></span></div>
       <div class="row"><span data-i18n="cart.shipping"></span><span id="sumShip"></span></div>
       <div class="row total"><span data-i18n="cart.total"></span><span id="sumTotal"></span></div>
       
@@ -215,20 +215,20 @@
 <div id="cliqModal" hidden>
   <div class="cliq-modal-card">
     <button type="button" class="cliq-x" id="cliqX" aria-label="close">×</button>
-    <h3>دفع Cliq</h3>
+    <h3 data-i18n="checkout.cliqModalTitle"></h3>
     <div class="cliq-info">
       <div class="cliq-row">
-        <span>معرّف Cliq</span>
+        <span data-i18n="checkout.cliqId"></span>
         <code id="cliqCode" class="font-en">SAWWA1</code>
       </div>
       <div class="cliq-row">
-        <span>المبلغ المطلوب</span>
+        <span data-i18n="checkout.cliqAmount"></span>
         <strong id="cliqAmount" class="font-en">0.00 JOD</strong>
       </div>
     </div>
-    <p class="cliq-hint">حوّل المبلغ إلى المعرّف أعلاه من تطبيق بنكك، ثم ارفع صورة إشعار التحويل.</p>
+    <p class="cliq-hint" data-i18n="checkout.cliqInstructions"></p>
     <label class="cliq-file-label">
-      <span>صورة إشعار التحويل</span>
+      <span data-i18n="checkout.proof"></span>
       <input type="file" id="cliqFileInput" accept="image/*" hidden />
       <div class="cliq-file-box" id="cliqFileBox">
         <span class="cfb-icon">📷</span>
@@ -236,8 +236,8 @@
       </div>
     </label>
     <div class="cliq-modal-actions">
-      <button type="button" class="btn primary" id="cliqConfirm">تأكيد الدفع</button>
-      <button type="button" class="btn ghost" id="cliqCancel">إلغاء</button>
+      <button type="button" class="btn primary" id="cliqConfirm" data-i18n="checkout.cliqConfirm"></button>
+      <button type="button" class="btn ghost" id="cliqCancel" data-i18n="checkout.cliqCancel"></button>
     </div>
   </div>
 </div>
@@ -277,7 +277,12 @@ UI.init({
     const submitBtn      = document.getElementById("submitBtn");
 
     if (cliqCode) cliqCode.textContent = window.SAWWA.cliqId || "SAWWA1";
-    citySel.innerHTML = `<option value="">--</option>` + Shipping.list().map((c) => `<option>${c}</option>`).join("");
+    
+    // ترجمة المدن
+    citySel.innerHTML = `<option value="">--</option>` + Shipping.list().map((c) => {
+      const label = lang === "ar" ? c : Shipping.ZONES[c].en;
+      return `<option value="${c}">${label}</option>`;
+    }).join("");
 
     let appliedCoupon = null;
     let cliqProofFile = null;
@@ -387,7 +392,7 @@ UI.init({
     const renderItems = () => {
       const items = Cart.get();
       document.getElementById("summaryItems").innerHTML = items.length === 0
-        ? `<p class="muted">${lang === "ar" ? "لا منتجات." : "No items."}</p>`
+        ? `<p class="muted">${t('account.noItems')}</p>`
         : items.map((it) => `
           <div class="row small"><span>${lang === "ar" ? it.nameAr : it.nameEn} × ${it.qty}</span><span>${UI.fmt(it.price * it.qty)}</span></div>
         `).join("");
@@ -399,12 +404,18 @@ UI.init({
       if (!code) { status.innerHTML = ""; appliedCoupon = null; Coupons.clear(); sum(); return; }
       const res = Coupons.apply(code, Cart.subtotal());
       if (!res.ok) {
-        const reasons = { not_found: "الكود غير موجود", inactive: "غير مفعّل", expired: "انتهت صلاحيته", max_uses: "انتهى استخدامه", min_cart: "الحد الأدنى لم يتحقق" };
+        const reasons = { 
+          not_found: lang === "ar" ? "الكود غير موجود" : "Code not found", 
+          inactive: lang === "ar" ? "غير مفعّل" : "Inactive", 
+          expired: lang === "ar" ? "انتهت صلاحيته" : "Expired", 
+          max_uses: lang === "ar" ? "انتهى استخدامه" : "Max uses reached", 
+          min_cart: lang === "ar" ? "الحد الأدنى لم يتحقق" : "Minimum cart not met" 
+        };
         status.innerHTML = `<div class="coupon-error">${reasons[res.reason] || "خطأ"}</div>`;
         appliedCoupon = null; sum(); return;
       }
       appliedCoupon = res.coupon;
-      status.innerHTML = `<div class="coupon-applied"><span>✓</span><span>${res.coupon.code} مُطبَّق</span><button type="button" id="couponRemove">×</button></div>`;
+      status.innerHTML = `<div class="coupon-applied"><span>✓</span><span>${res.coupon.code} ${lang === "ar" ? "مُطبَّق" : "applied"}</span><button type="button" id="couponRemove">×</button></div>`;
       document.getElementById("couponRemove").onclick = () => { appliedCoupon = null; Coupons.clear(); status.innerHTML = ""; document.getElementById("couponInput").value = ""; sum(); };
       sum();
     };
@@ -486,21 +497,21 @@ UI.init({
       box.innerHTML = `
         <div style="font-size: 64px; margin-bottom: 16px;">${successIcon}</div>
         <h2 style="color: var(--brand); font-size: 24px; font-weight: 800; margin-bottom: 12px;">
-          ${lang === 'ar' ? '✓ تم استلام طلبك بنجاح!' : '✓ Order received successfully!'}
+          ${t('checkout.success')}
         </h2>
         <p style="color: var(--text-2); font-size: 16px; margin-bottom: 20px; font-weight: 600;">
           ${successMessage}
         </p>
         
         <div style="background: var(--surface-2); padding: 16px; border-radius: var(--r-sm); margin-bottom: 24px; display: inline-block; text-align: start;">
-          <div style="margin-bottom: 8px;"><span style="color: var(--text-3); font-size: 13px;">${lang === 'ar' ? 'رقم الطلب:' : 'Order ID:'}</span> <strong class="font-en" style="color: var(--text); font-size: 16px;">${id}</strong></div>
-          <div><span style="color: var(--text-3); font-size: 13px;">${lang === 'ar' ? 'طريقة الدفع:' : 'Payment Method:'}</span> <strong style="color: var(--text); font-size: 15px;">${payMethod}</strong></div>
+          <div style="margin-bottom: 8px;"><span style="color: var(--text-3); font-size: 13px;">${t('checkout.orderId')}</span> <strong class="font-en" style="color: var(--text); font-size: 16px;">${id}</strong></div>
+          <div><span style="color: var(--text-3); font-size: 13px;">${t('checkout.payMethod')}</span> <strong style="color: var(--text); font-size: 15px;">${payMethod}</strong></div>
         </div>
         
         <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-          <a class="btn primary" href="track.html" style="min-width: 140px;">${lang === 'ar' ? 'تتبع الطلب' : 'Track order'}</a>
+          <a class="btn primary" href="track.html" style="min-width: 140px;">${t('checkout.track')}</a>
           <a class="btn ghost" href="https://wa.me/${window.SAWWA.whatsapp}?text=${waMsg}" target="_blank" rel="noopener" style="min-width: 140px;">
-            ${lang === 'ar' ? 'تواصل واتساب' : 'WhatsApp'}
+            ${t('checkout.contactWa')}
           </a>
         </div>`;
       
@@ -516,11 +527,15 @@ UI.init({
       const fd = new FormData(e.target);
       const city = fd.get("city");
 
-      if (Cart.get().length === 0) { UI.toast("سلتك فارغة", "warn"); return; }
-      if (!city) { UI.toast("اختر المحافظة", "warn"); return; }
-      if (pay === "CLIQ" && !cliqProofFile) { UI.toast("ارفع صورة الإشعار", "warn"); openCliqModal(); return; }
+      if (Cart.get().length === 0) { UI.toast(lang === "ar" ? "سلتك فارغة" : "Cart is empty", "warn"); return; }
+      if (!city) { UI.toast(lang === "ar" ? "اختر المحافظة" : "Select governorate", "warn"); return; }
+      if (pay === "CLIQ" && !cliqProofFile) { UI.toast(lang === "ar" ? "ارفع صورة الإشعار" : "Upload receipt", "warn"); openCliqModal(); return; }
 
-      const ok = await UI.confirm("تأكيد الطلب", "سيتم إرسال طلبك الآن.", { icon: "✓" });
+      const ok = await UI.confirm(
+        lang === "ar" ? "تأكيد الطلب" : "Confirm Order",
+        lang === "ar" ? "سيتم إرسال طلبك الآن." : "Your order will be placed now.",
+        { icon: "✓" }
+      );
       if (!ok) return;
 
       completeOrder(pay, pay === "CLIQ" ? "AWAITING_VERIFICATION" : "PENDING");
