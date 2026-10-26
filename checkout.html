@@ -132,11 +132,7 @@
     .cliq-modal-card h3 { font-size: 18px; }
     .cliq-modal-actions { flex-direction: column-reverse; }
   }
-  /* إخفاء زر باي بال الافتراضي عشان نستخدم التصميم تبعنا */
-  .paypal-buttons-container {
-    position: relative;
-    z-index: 1;
-  }
+  .paypal-buttons-container { position: relative; z-index: 1; }
 </style>
 </head>
 <body>
@@ -204,7 +200,6 @@
       <div class="row"><span data-i18n="cart.shipping"></span><span id="sumShip"></span></div>
       <div class="row total"><span data-i18n="cart.total"></span><span id="sumTotal"></span></div>
       
-      <!-- صندوق باي بال -->
       <div id="paypalBox" style="display:none; margin-top: 20px;">
         <div id="paypal-button-container"></div>
         <p style="text-align: center; font-size: 12px; color: var(--text-3); margin-top: 10px;">ادفع بأمان عبر PayPal أو البطاقات</p>
@@ -214,10 +209,7 @@
     </aside>
   </form>
 
-  <!-- صندوق النجاح -->
-  <div id="successBox" class="success-box" hidden style="text-align: center; padding: 40px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border);">
-    <!-- سيتم تعبئته بالجافاسكريبت -->
-  </div>
+  <div id="successBox" class="success-box" hidden style="text-align: center; padding: 40px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border);"></div>
 </main>
 
 <div id="cliqModal" hidden>
@@ -250,7 +242,6 @@
   </div>
 </div>
 
-<!-- سكربت باي بال -->
 <script src="https://www.paypal.com/sdk/js?client-id=BAAtMFdRIAJ4WEp4L7-smhFsvU4uXti9FlWhntsJyzjFjQpCTxs1On6xZ94aJq0zmKzK7bAvLpAuWWsMBY&currency=USD&components=buttons"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/supabase.js"></script>
@@ -292,7 +283,6 @@ UI.init({
     let cliqProofFile = null;
     let paypalOrderId = null;
 
-    /* ============ MODAL CLIQ ============ */
     const openCliqModal = () => { sum(); cliqModal.hidden = false; document.body.style.overflow = "hidden"; };
     const closeCliqModal = () => { cliqModal.hidden = true; document.body.style.overflow = ""; };
 
@@ -313,7 +303,6 @@ UI.init({
       cliqProofFile = f; cliqFileBox.classList.add("has-file"); cliqFileText.textContent = f.name;
     };
 
-    /* ============ PAYPAL LOGIC ============ */
     document.querySelectorAll('input[name="pay"]').forEach(radio => {
       radio.addEventListener('change', (e) => {
         if (e.target.value === 'PAYPAL') {
@@ -332,25 +321,31 @@ UI.init({
         window.paypal.Buttons({
           style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
           createOrder: async () => {
-            const t = sum();
             const res = await fetch('/api/paypal-create', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ totalJOD: t.total })
+              body: JSON.stringify({ items: Cart.get() })
             });
             const data = await res.json();
+            if (data.error) {
+              if (window.UI?.toast) UI.toast("خطأ في الاتصال بالسيرفر", "error");
+              throw new Error(data.error);
+            }
             paypalOrderId = data.id;
             return data.id;
           },
           onApprove: async () => {
+            const internalOrderId = "SW-" + Date.now().toString(36).toUpperCase();
             const res = await fetch('/api/paypal-capture', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ orderID: paypalOrderId })
+              body: JSON.stringify({ orderID: paypalOrderId, internalOrderId: internalOrderId })
             });
             const data = await res.json();
             if (data.status === 'COMPLETED') {
-              completeOrder("PAYPAL", "PAID");
+              completeOrder("PAYPAL", "PAID", internalOrderId);
+            } else {
+              if (window.UI?.toast) UI.toast("فشل تأكيد الدفع من PayPal", "error");
             }
           },
           onError: (err) => {
@@ -361,7 +356,6 @@ UI.init({
       }
     };
 
-    /* ============ SUM ============ */
     const sum = () => {
       const sub = Cart.subtotal();
       const city = citySel.value;
@@ -420,14 +414,14 @@ UI.init({
     renderItems();
     sum();
 
-    /* ============ COMPLETE ORDER & SUCCESS UI ============ */
-    const completeOrder = async (payMethod, payStatus) => {
+    const completeOrder = async (payMethod, payStatus, forcedId = null) => {
       const fd = new FormData(document.getElementById("checkoutForm"));
       const t = sum();
       const earned = Math.floor((t.total / 100) * window.SAWWA.loyalty.earnPerJOD);
       const usedPts = document.getElementById("usePoints").checked && Store.points.get() >= window.SAWWA.loyalty.minRedeem
         ? Math.min(Store.points.get(), Math.floor(Store.points.get() / 100) * 100) : 0;
-      const id = "SW-" + Date.now().toString(36).toUpperCase();
+      
+      const id = forcedId || "SW-" + Date.now().toString(36).toUpperCase();
 
       const order = {
         id, createdAt: Date.now(),
@@ -443,10 +437,8 @@ UI.init({
         pointsEarned: earned, pointsUsed: usedPts
       };
 
-      // 1. حفظ محلي
       Store.orders.create(order);
 
-      // 2. حفظ في Supabase
       if (window.SB && typeof SB !== 'undefined' && SB.isEnabled()) {
         SB.orders.create(order).then((ok) => {
           if (ok) console.log("[Checkout] Order synced to cloud:", order.id);
@@ -469,7 +461,6 @@ UI.init({
         );
       }
 
-      // إخفاء الفورم وإظهار رسالة النجاح الفخمة
       document.getElementById("checkoutForm").style.display = "none";
       const box = document.getElementById("successBox");
       box.hidden = false;
@@ -517,11 +508,10 @@ UI.init({
       UI.toast(lang === "ar" ? "تم استلام طلبك بنجاح!" : "Order placed successfully!", "success", null, 5000);
     };
 
-    /* ============ SUBMIT (COD / Cliq) ============ */
     document.getElementById("checkoutForm").onsubmit = async (e) => {
       e.preventDefault();
       const pay = document.querySelector('input[name="pay"]:checked').value;
-      if (pay === "PAYPAL") return; // زر باي بال هو اللي بيتصرف
+      if (pay === "PAYPAL") return;
 
       const fd = new FormData(e.target);
       const city = fd.get("city");
