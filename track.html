@@ -24,12 +24,11 @@
   <div class="track-wrap">
     <form class="track-form" id="trackForm">
       <label style="display:block;margin-bottom:14px">
-        <span style="display:block;font-size:12px;margin-bottom:8px;color:var(--muted);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-family:Orbitron,sans-serif">
-          رقم الطلب
+        <span style="display:block;font-size:12px;margin-bottom:8px;color:var(--muted);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-family:Orbitron,sans-serif" data-i18n="track.orderId">
         </span>
         <input type="text" id="trackId" placeholder="SW-XXXXXXXX" required />
       </label>
-      <button class="btn primary full" type="submit">تتبع</button>
+      <button class="btn primary full" type="submit" data-i18n="track.btn"></button>
     </form>
 
     <div id="trackResult"></div>
@@ -59,7 +58,7 @@ UI.init({
           <div class="track-head">
             <div>
               <div style="font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.15em;text-transform:uppercase;font-family:Orbitron,sans-serif;margin-bottom:6px">
-                ${lang === "ar" ? "رقم الطلب" : "Order"}
+                ${t('track.orderId')}
               </div>
               <strong>${order.id}</strong>
             </div>
@@ -70,15 +69,15 @@ UI.init({
             ${tl.map((s) => `
               <div class="tl-item ${s.done ? "done" : ""} ${s.current ? "current" : ""}">
                 <div class="tl-label">${s.label}</div>
-                <div class="tl-time">${new Date(order.createdAt).toLocaleString(lang === "ar" ? "ar-JO" : "en-JO")}</div>
+                <div class="tl-time">${new Date(order.createdAt).toLocaleString(lang === "ar" ? "ar-JO" : "en-US")}</div>
               </div>`).join("")}
           </div>
 
           <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line);font-size:14px">
-            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${lang === "ar" ? "الاسم" : "Name"}</span><strong>${order.name || "—"}</strong></div>
-            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${lang === "ar" ? "المدينة" : "City"}</span><strong>${order.city || "—"}</strong></div>
-            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${lang === "ar" ? "المجموع" : "Total"}</span><strong>${UI.fmt(order.total)}</strong></div>
-            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${lang === "ar" ? "طريقة الدفع" : "Payment"}</span><strong>${order.paymentMethod || "—"}</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${t('track.name')}</span><strong>${order.name || "—"}</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${t('track.city')}</span><strong>${order.city || "—"}</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${t('track.total')}</span><strong>${UI.fmt(order.total)}</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span>${t('track.payment')}</span><strong>${order.paymentMethod || "—"}</strong></div>
           </div>
         </div>`;
     };
@@ -91,9 +90,9 @@ UI.init({
       if (!order) {
         out.innerHTML = `<div class="track-result" style="text-align:center;padding:40px">
           <p style="font-size:16px;color:var(--muted);margin-bottom:12px">
-            ${lang === "ar" ? "لم نجد هذا الطلب. تأكد من الرقم أو تواصل معنا عبر واتساب." : "Order not found. Check the ID or contact us on WhatsApp."}
+            ${t('track.notFound')}
           </p>
-          <a href="https://wa.me/962791252004" target="_blank" rel="noopener" class="btn primary">واتساب</a>
+          <a href="https://wa.me/962791252004" target="_blank" rel="noopener" class="btn primary">${t('track.wa')}</a>
         </div>`;
         return;
       }
