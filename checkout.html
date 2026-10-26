@@ -16,7 +16,6 @@
 <style>
   [hidden] { display: none !important; }
 
-  /* تصميم أزرار الدفع */
   .pay-methods {
     display: flex;
     flex-direction: column;
@@ -34,9 +33,7 @@
     transition: all 0.2s;
     background: var(--surface);
   }
-  .pay-option:hover {
-    border-color: var(--gold);
-  }
+  .pay-option:hover { border-color: var(--gold); }
   .pay-option.active {
     border-color: var(--gold);
     background: color-mix(in srgb, var(--gold) 5%, transparent);
@@ -50,15 +47,8 @@
     font-size: 15px;
   }
   html.dark .pay-option-label { color: var(--mint); }
-  .pay-icons {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .pay-icons svg {
-    height: 24px;
-    width: auto;
-  }
+  .pay-icons { display: flex; gap: 8px; align-items: center; }
+  .pay-icons svg { height: 24px; width: auto; }
   .pay-radio {
     width: 20px;
     height: 20px;
@@ -176,7 +166,6 @@ UI.init({
     const paypalBox      = document.getElementById("paypalBox");
     const submitBtn      = document.getElementById("submitBtn");
 
-    // تعبئة المدن
     if (typeof Shipping !== 'undefined' && Shipping.list) {
       citySel.innerHTML = `<option value="">--</option>` + Shipping.list().map((c) => {
         const label = lang === "ar" ? c : (Shipping.ZONES[c]?.en || c);
