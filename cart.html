@@ -4,11 +4,20 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>السلة — SaWWA Souq</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/identity.css" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/alerts.css" />
 <link rel="stylesheet" href="css/rtl.css" />
+<link rel="stylesheet" href="css/mobile.css" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 </head>
 <body>
+<canvas id="aurora"></canvas>
+<div id="grain"></div>
+
 <main class="container">
   <h1 class="page-title" data-i18n="cart.title"></h1>
   <div id="cartWrap"></div>
@@ -19,6 +28,7 @@
 <script src="js/i18n.js"></script>
 <script src="js/store.js"></script>
 <script src="js/cart.js"></script>
+<script src="js/aurora.js"></script>
 <script src="js/ui.js"></script>
 <script>
 UI.init({
@@ -86,17 +96,5 @@ UI.init({
   }
 });
 </script>
-<script src="js/design-tokens.js"></script>
-<script src="js/config.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/wishlist.js"></script>
-<script src="js/notifications.js"></script>
-<script src="js/shipping.js"></script>
-<script src="js/coupons.js"></script>
-<script src="js/tracking.js"></script>
-<script src="js/store.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/aurora.js"></script>
-<script src="js/ui.js"></script>
 </body>
 </html>
