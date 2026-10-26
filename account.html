@@ -29,9 +29,7 @@
       </div>
 
       <div style="margin-top:20px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-border);border-radius:var(--r-md);padding:22px">
-        <h4 style="font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;font-family:Orbitron,sans-serif;color:var(--deep);margin-bottom:14px">
-          ${window.SAWWA?.lang === "ar" ? "الكوبونات المتاحة" : "Available coupons"}
-        </h4>
+        <h4 style="font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;font-family:Orbitron,sans-serif;color:var(--deep);margin-bottom:14px" data-i18n="account.coupons"></h4>
         <div id="couponsList"></div>
       </div>
     </section>
@@ -63,13 +61,13 @@ UI.init({
     const coup = Coupons.all().filter((c) => c.active && (!c.expires || new Date(c.expires) > Date.now()));
     const cList = document.getElementById("couponsList");
     if (coup.length === 0) {
-      cList.innerHTML = `<p class="muted" style="font-size:13px">${lang === "ar" ? "لا توجد كوبونات حاليًا." : "No coupons yet."}</p>`;
+      cList.innerHTML = `<p class="muted" style="font-size:13px">${t('account.noCoupons')}</p>`;
     } else {
       cList.innerHTML = coup.slice(0, 5).map((c) => `
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px">
           <div>
             <strong style="font-family:Orbitron,sans-serif;letter-spacing:.08em">${c.code}</strong><br />
-            <small class="muted">${c.type === "percent" ? c.value + "%" : (c.value/100).toFixed(2) + " دينار"} ${lang === "ar" ? "خصم" : "off"}</small>
+            <small class="muted">${c.type === "percent" ? c.value + "%" : (c.value/100).toFixed(2) + " " + (lang === "ar" ? "دينار" : "JOD")} ${lang === "ar" ? "خصم" : "off"}</small>
           </div>
           <button class="btn ghost small copy-coupon" data-code="${c.code}">${lang === "ar" ? "نسخ" : "Copy"}</button>
         </div>`).join("");
@@ -82,7 +80,7 @@ UI.init({
     const list = Store.orders.all();
     const wrap = document.getElementById("ordersList");
     if (list.length === 0) {
-      wrap.innerHTML = `<p class="muted">${lang === "ar" ? "لا توجد طلبات بعد" : "No orders yet"}</p>`;
+      wrap.innerHTML = `<p class="muted">${t('account.noOrders')}</p>`;
     } else {
       wrap.innerHTML = list.map((o) => {
         const tl = Tracking.timeline(o, lang);
@@ -92,7 +90,7 @@ UI.init({
         <div class="order-row">
           <div>
             <div class="font-en"><strong>${o.id}</strong></div>
-            <small>${new Date(o.createdAt).toLocaleString(lang === "ar" ? "ar-JO" : "en-JO")}</small>
+            <small>${new Date(o.createdAt).toLocaleString(lang === "ar" ? "ar-JO" : "en-US")}</small>
           </div>
           <div>${o.items.length} × ${lang === "ar" ? "منتج" : "items"}</div>
           <div class="font-en">${UI.fmt(o.total)}</div>
