@@ -97,6 +97,8 @@ window.I18N = {
     "contact.title": "اتصل بنا",
     "about.title": "من نحن",
     "policy.title": "سياسة الاستبدال والضمان"
+    "features.cod": "الدفع عند التوصيل",
+    "features.payWith": "ادفع بـ",
   },
   en: {
     "nav.home": "Home",
@@ -196,6 +198,8 @@ window.I18N = {
     "contact.title": "Contact",
     "about.title": "About Us",
     "policy.title": "Return & Warranty Policy"
+      "features.cod": "Cash on Delivery",
+    "features.payWith": "Pay with",
   }
 };
 
