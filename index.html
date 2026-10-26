@@ -43,11 +43,11 @@
   </section>
 
   <section class="trust-strip">
-    <div class="trust-item">🚚 شحن 3 دنانير لكل الأردن</div>
-    <div class="trust-item">💵 الدفع عند الاستلام</div>
-    <div class="trust-item">📱 دفع Cliq</div>
-    <div class="trust-item">🛡️ ضمان 7 أيام</div>
-    <div class="trust-item">⭐ +4.8 تقييم العملاء</div>
+    <div class="trust-item">🚚 <span data-i18n="features.shipping"></span></div>
+    <div class="trust-item">💵 <span data-i18n="features.cod"></span></div>
+    <div class="trust-item">📱 <span data-i18n="features.cliq"></span></div>
+    <div class="trust-item">🛡️ <span data-i18n="features.warranty"></span></div>
+    <div class="trust-item">⭐ +4.8</div>
   </section>
 
   <section class="container">
@@ -67,7 +67,7 @@
 
   <section class="container">
     <h2 class="section-title font-en">REVIEWS</h2>
-    <p class="reviews-head">آراء عملاء حقيقيين — من داخل الأردن.</p>
+    <p class="reviews-head" data-i18n="home.reviews"></p>
     <div class="reviews-grid">
       <div class="review-card reveal">
         <div class="rv-stars">★★★★★</div>
@@ -91,30 +91,6 @@
         <div class="rv-author">
           <span class="rv-badge">✓ Verified</span>
           <span class="rv-name">محمد ع.</span>
-        </div>
-      </div>
-      <div class="review-card reveal">
-        <div class="rv-stars">★★★★★</div>
-        <p>"خدمة عملاء سريعة، دفع عند الاستلام، وما في أي تعقيد. 10/10."</p>
-        <div class="rv-author">
-          <span class="rv-badge">✓ Verified</span>
-          <span class="rv-name">رنا ح.</span>
-        </div>
-      </div>
-      <div class="review-card reveal">
-        <div class="rv-stars">★★★★★</div>
-        <p>"أحسن ماوس باد استخدمته، والمقاس 40×90 مثالي للكيبورد والماوس معًا."</p>
-        <div class="rv-author">
-          <span class="rv-badge">✓ Verified</span>
-          <span class="rv-name">يوسف ط.</span>
-        </div>
-      </div>
-      <div class="review-card reveal">
-        <div class="rv-stars">★★★★★</div>
-        <p>"شكرًا سوّا سوق، وصلني خلال يومين، التغليف مرتب، والجودة ممتازة."</p>
-        <div class="rv-author">
-          <span class="rv-badge">✓ Verified</span>
-          <span class="rv-name">سارة خ.</span>
         </div>
       </div>
     </div>
@@ -217,7 +193,7 @@ UI.init({
         </a>
         <div class="card-actions">
           <button class="btn primary full add-btn" data-id="${p.id}" ${p.stock <= 0 ? "disabled" : ""}>
-            ${p.stock <= 0 ? (lang === 'ar' ? 'نفد المخزون' : 'Out of stock') : (lang === 'ar' ? 'أضف إلى السلة' : 'Add to cart')}
+            ${p.stock <= 0 ? t('product.outOfStock') : t('product.addToCart')}
           </button>
         </div>
       </div>`;
@@ -234,7 +210,7 @@ UI.init({
             "success"
           );
           b.textContent = lang === "ar" ? "✓ أُضيف" : "✓ Added";
-          setTimeout(() => { b.textContent = lang === "ar" ? "أضف إلى السلة" : "Add to cart"; }, 1100);
+          setTimeout(() => { b.textContent = t('product.addToCart'); }, 1100);
         }
       }
     });
