@@ -14,9 +14,8 @@
 <link rel="stylesheet" href="css/mobile.css" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
-  /* إصلاح حقل الكمية */
   .qty-picker input {
-    color: var(--text) !important; /* إجبار اللون الداكن */
+    color: var(--text) !important;
     font-family: var(--font-en) !important;
     font-size: 16px !important;
     font-weight: 700 !important;
@@ -24,11 +23,11 @@
     text-align: center;
     border: none;
     background: transparent;
-    -moz-appearance: textfield; /* إخفاء الأسهم في فايرفوكس */
+    -moz-appearance: textfield;
   }
   .qty-picker input::-webkit-outer-spin-button,
   .qty-picker input::-webkit-inner-spin-button {
-    -webkit-appearance: none; /* إخفاء الأسهم في كروم وسفاري */
+    -webkit-appearance: none;
     margin: 0;
   }
 </style>
@@ -74,7 +73,7 @@ UI.init({
     const lang = window.SAWWA.lang;
 
     if (!p) {
-      wrap.innerHTML = `<p class="muted">${lang === 'ar' ? 'المنتج غير موجود.' : 'Product not found.'}</p>`;
+      wrap.innerHTML = `<p class="muted">${t('product.notFound')}</p>`;
       return;
     }
 
@@ -83,7 +82,6 @@ UI.init({
     const discount = onSale ? Math.round((1 - p.price / p.compareAtPrice) * 100) : 0;
     const img = (p.images && p.images[0]) || "assets/placeholder.svg";
     
-    // إخفاء المخزون إذا كان كبير (أكثر من 5 قطع)، وإظهار تحذير إذا كان قليل
     const stockHtml = p.stock > 5 
       ? `` 
       : `<span style="color:#C03030;font-weight:800;background:rgba(192,48,48,0.1)">⚠️ ${lang === 'ar' ? 'متبقي فقط' : 'Only'} ${p.stock} ${lang === 'ar' ? 'قطع' : 'left'}</span>`;
@@ -102,14 +100,14 @@ UI.init({
         <p class="desc">${lang === 'ar' ? p.descAr : p.descEn}</p>
         
         <div class="meta">
-          <span>${lang === 'ar' ? 'الحزمة' : 'Package'}: ${p.packaging || '-'}</span>
-          ${p.warranty ? `<span>✓ ${lang === 'ar' ? 'ضمان الجودة' : 'Warranty'}</span>` : ''}
+          <span>${t('product.package')}: ${p.packaging || '-'}</span>
+          ${p.warranty ? `<span>✓ ${t('product.warranty')}</span>` : ''}
           ${stockHtml}
         </div>
         
         <div class="product-actions">
           <div class="qty-row">
-            <label style="font-weight:800;color:var(--text-2)">${lang === 'ar' ? 'الكمية' : 'Qty'}</label>
+            <label style="font-weight:800;color:var(--text-2)">${t('product.qty')}</label>
             <div class="qty-picker">
               <button type="button" id="qDec">−</button>
               <input type="number" id="qInput" min="1" max="${p.stock}" value="1" />
@@ -118,10 +116,10 @@ UI.init({
           </div>
           <div class="actions">
             <button class="btn primary" id="addBtn" ${p.stock <= 0 ? "disabled" : ""}>
-              ${p.stock <= 0 ? (lang === 'ar' ? 'نفد المخزون' : 'Out of stock') : (lang === 'ar' ? 'أضف إلى السلة' : 'Add to cart')}
+              ${p.stock <= 0 ? t('product.outOfStock') : t('product.addToCart')}
             </button>
             <button class="btn ghost" id="buyNowBtn" ${p.stock <= 0 ? "disabled" : ""}>
-              ${lang === 'ar' ? 'اشترِ الآن' : 'Buy now'}
+              ${t('product.buyNow')}
             </button>
           </div>
         </div>
@@ -144,7 +142,7 @@ UI.init({
             "success"
           );
           addBtn.textContent = lang === "ar" ? "✓ أُضيف" : "✓ Added";
-          setTimeout(() => { addBtn.textContent = lang === "ar" ? "أضف إلى السلة" : "Add to cart"; }, 1200);
+          setTimeout(() => { addBtn.textContent = t('product.addToCart'); }, 1200);
         }
       };
     }
@@ -168,7 +166,7 @@ UI.init({
     const renderR = () => {
       const list = Store.reviews.byProduct(p.id);
       rvList.innerHTML = list.length === 0
-        ? `<p class="muted">${lang === 'ar' ? 'لا توجد مراجعات بعد.' : 'No reviews yet.'}</p>`
+        ? `<p class="muted">${t('product.noReviews')}</p>`
         : list.map((r) => `
           <div class="review reveal">
             <div class="rv-head"><strong>${r.name}</strong><span>${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span></div>
