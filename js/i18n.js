@@ -97,7 +97,7 @@ window.I18N = {
     "contact.title": "اتصل بنا",
     "about.title": "من نحن",
     "policy.title": "سياسة الاستبدال والضمان"
-    "features.cod": "الدفع عند التوصيل",
+        "features.cod": "الدفع عند التوصيل",
     "features.payWith": "ادفع بـ",
   },
   en: {
