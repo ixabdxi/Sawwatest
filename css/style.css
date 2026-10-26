@@ -552,3 +552,45 @@ html.dark .tl-item .tl-label { color: var(--bg); }
 @media (max-width: 480px) {
   .grid { grid-template-columns: 1fr; }
 }
+
+/* ============ COUNTDOWN TIMER ============ */
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(217, 156, 69, 0.1);
+  border: 1px solid rgba(217, 156, 69, 0.3);
+  padding: 16px 20px;
+  border-radius: var(--r);
+  margin-bottom: 24px;
+  color: var(--deep);
+  animation: pulseBg 2s infinite alternate;
+}
+html.dark .countdown-timer {
+  background: rgba(232, 177, 92, 0.1);
+  border-color: rgba(232, 177, 92, 0.3);
+  color: var(--mint);
+}
+.ct-icon {
+  font-size: 24px;
+}
+.ct-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ct-text strong {
+  font-size: 14px;
+  font-weight: 800;
+}
+.ct-clock {
+  font-family: var(--font-en);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  direction: ltr;
+}
+@keyframes pulseBg {
+  0% { box-shadow: 0 0 0 0 rgba(217, 156, 69, 0.2); }
+  100% { box-shadow: 0 0 0 10px rgba(217, 156, 69, 0); }
+}
