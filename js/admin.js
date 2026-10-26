@@ -82,7 +82,6 @@
     
     if (id === "dash") { 
       renderDash(); 
-      // تأخير بسيط جداً عشان العنصر ياخد مساحته قبل ما نرسم
       setTimeout(() => drawSalesChart(read(K.orders, [])), 100); 
     }
     if (id === "orders") renderOrders();
@@ -102,7 +101,14 @@
   const bindNav = () => {
     $$(".side-tab").forEach((b) => {
       b.removeEventListener("click", b._handler);
-      b._handler = () => switchTab(b.dataset.tab);
+      b._handler = () => {
+        switchTab(b.dataset.tab);
+        // إغلاق القائمة تلقائياً على الجوال
+        if (window.innerWidth <= 900) {
+          const sidebar = document.querySelector('.admin-sidebar');
+          if (sidebar) sidebar.classList.remove('open');
+        }
+      };
       b.addEventListener("click", b._handler);
     });
   };
@@ -160,7 +166,6 @@
     const container = $("#chartContainer");
     if (!canvas || !container) return;
 
-    // مراقبة حجم الحاوية عشان نرسم الشارت لما تظهر
     if (!canvas._resizeObserver) {
       canvas._resizeObserver = new ResizeObserver(() => {
         if (container.clientWidth > 0) {
@@ -170,7 +175,6 @@
       canvas._resizeObserver.observe(container);
     }
 
-    // نحاول نرسم على طول لو العرض موجود
     if (container.clientWidth > 0) {
       renderChartLogic(canvas, orders);
     }
@@ -203,7 +207,6 @@
     const padL = 40, padR = 10, padT = 20, padB = 30;
     const w = cssW - padL - padR, h = cssH - padT - padB, barW = w / days.length - 10;
 
-    // Grid lines
     ctx.strokeStyle = "rgba(143,169,165,.3)"; 
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -214,7 +217,6 @@
     }
     ctx.stroke();
 
-    // Bars
     const grad = ctx.createLinearGradient(0, padT, 0, padT + h);
     grad.addColorStop(0, "#5FD0C5"); 
     grad.addColorStop(1, "#0F5C56");
@@ -237,7 +239,6 @@
       ctx.fill();
     });
 
-    // Dates
     ctx.fillStyle = "#4A5654"; 
     ctx.font = "11px 'Baloo Bhaijaan 2', sans-serif"; 
     ctx.textAlign = "center";
@@ -1044,5 +1045,15 @@
   };
 
   if (sessionValid()) showPanel();
+
+  // إغلاق القائمة عند اختيار قسم على الجوال
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.admin-sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+    
+    if (menuToggle) menuToggle.addEventListener('click', () => sidebar.classList.add('open'));
+    if (sidebarClose) sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+  });
 
 })();
