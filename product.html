@@ -13,6 +13,25 @@
 <link rel="stylesheet" href="css/rtl.css" />
 <link rel="stylesheet" href="css/mobile.css" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<style>
+  /* إصلاح حقل الكمية */
+  .qty-picker input {
+    color: var(--text) !important; /* إجبار اللون الداكن */
+    font-family: var(--font-en) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    width: 50px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    -moz-appearance: textfield; /* إخفاء الأسهم في فايرفوكس */
+  }
+  .qty-picker input::-webkit-outer-spin-button,
+  .qty-picker input::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* إخفاء الأسهم في كروم وسفاري */
+    margin: 0;
+  }
+</style>
 </head>
 <body>
 <canvas id="aurora"></canvas>
@@ -63,6 +82,11 @@ UI.init({
     const onSale = p.compareAtPrice && p.compareAtPrice > p.price;
     const discount = onSale ? Math.round((1 - p.price / p.compareAtPrice) * 100) : 0;
     const img = (p.images && p.images[0]) || "assets/placeholder.svg";
+    
+    // إخفاء المخزون إذا كان كبير (أكثر من 5 قطع)، وإظهار تحذير إذا كان قليل
+    const stockHtml = p.stock > 5 
+      ? `` 
+      : `<span style="color:#C03030;font-weight:800;background:rgba(192,48,48,0.1)">⚠️ ${lang === 'ar' ? 'متبقي فقط' : 'Only'} ${p.stock} ${lang === 'ar' ? 'قطع' : 'left'}</span>`;
 
     wrap.innerHTML = `
       <div class="product-img reveal-3d">
@@ -76,14 +100,16 @@ UI.init({
           <span class="price big">${UI.fmt(p.price)}</span>
         </div>
         <p class="desc">${lang === 'ar' ? p.descAr : p.descEn}</p>
+        
         <div class="meta">
           <span>${lang === 'ar' ? 'الحزمة' : 'Package'}: ${p.packaging || '-'}</span>
-          <span>${lang === 'ar' ? 'المخزون' : 'Stock'}: ${p.stock}</span>
           ${p.warranty ? `<span>✓ ${lang === 'ar' ? 'ضمان الجودة' : 'Warranty'}</span>` : ''}
+          ${stockHtml}
         </div>
+        
         <div class="product-actions">
           <div class="qty-row">
-            <label>${lang === 'ar' ? 'الكمية' : 'Qty'}</label>
+            <label style="font-weight:800;color:var(--text-2)">${lang === 'ar' ? 'الكمية' : 'Qty'}</label>
             <div class="qty-picker">
               <button type="button" id="qDec">−</button>
               <input type="number" id="qInput" min="1" max="${p.stock}" value="1" />
@@ -101,9 +127,12 @@ UI.init({
         </div>
       </div>`;
 
-    const qty = () => Math.max(1, Math.min(p.stock || 1, parseInt(document.getElementById("qInput").value, 10) || 1));
-    document.getElementById("qDec").onclick = () => { document.getElementById("qInput").value = Math.max(1, qty() - 1); };
-    document.getElementById("qInc").onclick = () => { document.getElementById("qInput").value = Math.min(p.stock || 1, qty() + 1); };
+    const qtyInput = document.getElementById("qInput");
+    const qty = () => Math.max(1, Math.min(p.stock || 1, parseInt(qtyInput.value, 10) || 1));
+    
+    document.getElementById("qDec").onclick = () => { qtyInput.value = Math.max(1, qty() - 1); };
+    document.getElementById("qInc").onclick = () => { qtyInput.value = Math.min(p.stock || 1, qty() + 1); };
+    qtyInput.oninput = () => { qtyInput.value = qty(); };
 
     const addBtn = document.getElementById("addBtn");
     if (addBtn && p.stock > 0) {
