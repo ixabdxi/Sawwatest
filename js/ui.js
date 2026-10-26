@@ -140,7 +140,6 @@ window.UI = (() => {
 
     if (!targetElement) return;
 
-    // إنشاء عنصر العداد
     const timerEl = el("div", "countdown-timer");
     timerEl.innerHTML = `
       <div class="ct-icon">⏳</div>
@@ -152,10 +151,8 @@ window.UI = (() => {
       </div>
     `;
 
-    // إدراج العداد قبل العنصر الأساسي
     targetElement.parentNode.insertBefore(timerEl, targetElement);
 
-    // حساب الوقت (ينتهي كل 24 ساعة - منتصف الليل)
     const tick = () => {
       const now = new Date();
       const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
@@ -207,7 +204,7 @@ window.UI = (() => {
             <div class="np-item">
               <div class="np-title">${n.title}</div>
               <div class="np-msg">${n.body}</div>
-              <div class="np-time">${new Date(n.createdAt || Date.now()).toLocaleString("ar-JO")}</div>
+              <div class="np-time">${new Date(n.createdAt || Date.now()).toLocaleString(window.SAWWA.lang === "ar" ? "ar-JO" : "en-US")}</div>
             </div>`).join("")}
       </div>`;
     document.body.appendChild(p);
@@ -253,7 +250,7 @@ window.UI = (() => {
           <a href="shop.html" data-i18n="nav.shop"></a>
           <a href="about.html" data-i18n="nav.about"></a>
           <a href="account.html" data-i18n="nav.account"></a>
-          <a href="track.html">${lang === "ar" ? "تتبع الطلب" : "Track"}</a>
+          <a href="track.html" data-i18n="nav.track"></a>
         </nav>
         <div class="actions">
           <button class="icon-btn" id="langToggle">${lang === "ar" ? "EN" : "AR"}</button>
@@ -274,8 +271,7 @@ window.UI = (() => {
     h.querySelector("#langToggle").onclick = () => {
       const next = window.SAWWA.lang === "ar" ? "en" : "ar";
       window.setLang(next);
-      h.querySelector("#langToggle").textContent = next === "ar" ? "EN" : "AR";
-      toast(next === "ar" ? "تم التبديل إلى العربية" : "Switched to English", "info", null, 2000);
+      location.reload(); // إعادة تحميل لضمان ترجمة المنتجات
     };
     h.querySelector("#themeToggle").onclick = () => window.toggleTheme();
     h.querySelector("#notifBtn").onclick = (e) => { e.stopPropagation(); openNotifPanel(); };
@@ -314,21 +310,21 @@ window.UI = (() => {
           <p data-i18n="hero.tagline"></p>
         </div>
         <div>
-          <h4>${window.SAWWA.lang === "ar" ? "المتجر" : "Shop"}</h4>
+          <h4 data-i18n="nav.shop"></h4>
           <a href="shop.html" data-i18n="nav.shop"></a>
           <a href="about.html" data-i18n="nav.about"></a>
-          <a href="faq.html">${window.SAWWA.lang === "ar" ? "الأسئلة الشائعة" : "FAQ"}</a>
+          <a href="faq.html" data-i18n="footer.faq"></a>
         </div>
         <div>
-          <h4>${window.SAWWA.lang === "ar" ? "الحساب" : "Account"}</h4>
+          <h4 data-i18n="nav.account"></h4>
           <a href="account.html" data-i18n="nav.account"></a>
-          <a href="track.html">${window.SAWWA.lang === "ar" ? "تتبع الطلب" : "Track order"}</a>
-          <a href="wishlist.html">${window.SAWWA.lang === "ar" ? "قائمة الرغبات" : "Wishlist"}</a>
+          <a href="track.html" data-i18n="nav.track"></a>
+          <a href="wishlist.html" data-i18n="footer.wishlist"></a>
         </div>
         <div>
           <h4 data-i18n="footer.contact"></h4>
           <a href="https://wa.me/${window.SAWWA.whatsapp}" target="_blank" rel="noopener">WhatsApp: ${window.SAWWA.whatsappDisplay}</a>
-          <a href="contact.html">${window.SAWWA.lang === "ar" ? "اتصل بنا" : "Contact us"}</a>
+          <a href="contact.html" data-i18n="footer.contactUs"></a>
           <a href="policy.html" data-i18n="footer.policy"></a>
         </div>
       </div>
