@@ -16,123 +16,56 @@
 <style>
   [hidden] { display: none !important; }
 
-  .cliq-summary {
-    background: color-mix(in srgb, var(--brand) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--brand) 25%, transparent);
-    border-radius: var(--r-sm);
-    padding: 14px 16px;
-    margin: 12px 0 18px;
+  /* تصميم أزرار الدفع */
+  .pay-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
   }
-  .cs-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .cs-label { font-weight: 700; color: var(--brand); font-size: 14px; }
-  .cs-edit {
-    background: none; border: none; cursor: pointer;
-    color: var(--brand); font-size: 13px; font-weight: 600;
-    text-decoration: underline; font-family: inherit;
-  }
-  .cs-file { font-size: 13px; color: var(--text-2); }
-
-  #cliqModal {
-    position: fixed; inset: 0; z-index: 9998;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-    animation: cliqFade .2s ease-out;
-  }
-  #cliqModal[hidden] { display: none !important; }
-  @keyframes cliqFade { from { opacity: 0; } to { opacity: 1; } }
-
-  .cliq-modal-card {
+  .pay-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: all 0.2s;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    padding: 32px 28px 26px;
-    max-width: 500px; width: 100%;
-    box-shadow: var(--shadow-lg);
-    position: relative;
-    animation: cliqPop .3s cubic-bezier(.34, 1.56, .64, 1);
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-    text-align: start;
   }
-  html.dark .cliq-modal-card { background: var(--surface-2); }
-  @keyframes cliqPop {
-    0% { transform: scale(0.92); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+  .pay-option:hover {
+    border-color: var(--gold);
   }
-  .cliq-x {
-    position: absolute; top: 14px; inset-inline-end: 14px;
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    color: var(--text-2); cursor: pointer;
-    font-size: 22px; font-weight: 400; line-height: 1;
-    display: grid; place-items: center;
-    transition: all .15s; font-family: inherit; padding: 0; z-index: 2;
+  .pay-option.active {
+    border-color: var(--gold);
+    background: color-mix(in srgb, var(--gold) 5%, transparent);
   }
-  .cliq-x:hover {
-    background: var(--danger-soft);
-    color: var(--danger);
-    border-color: var(--danger);
+  .pay-option-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    color: var(--deep);
+    font-size: 15px;
   }
-  html.dark .cliq-x { background: var(--surface-3); }
-  .cliq-modal-card h3 {
-    font-size: 20px; font-weight: 800;
-    color: var(--text); margin-bottom: 18px;
-    letter-spacing: -0.01em; padding-inline-end: 44px;
+  html.dark .pay-option-label { color: var(--mint); }
+  .pay-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
   }
-  .cliq-info {
-    background: var(--surface-2);
-    border-radius: var(--r-sm);
-    padding: 16px; margin-bottom: 16px;
-    display: flex; flex-direction: column; gap: 12px;
+  .pay-icons svg {
+    height: 24px;
+    width: auto;
   }
-  .cliq-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-  .cliq-row span { color: var(--text-2); font-weight: 600; }
-  .cliq-row code {
-    background: var(--brand); color: #fff;
-    padding: 5px 14px; border-radius: var(--r-sm);
-    font-family: var(--font-en); letter-spacing: .08em;
-    font-weight: 700; font-size: 14px;
+  .pay-radio {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--gold);
+    cursor: pointer;
   }
-  .cliq-row strong { color: var(--text); font-weight: 800; font-size: 17px; }
-  .cliq-hint { font-size: 14px; color: var(--text-2); line-height: 1.7; margin-bottom: 18px; }
-  .cliq-file-label > span {
-    display: block; font-size: 13px;
-    color: var(--text-2); font-weight: 600; margin-bottom: 8px;
-  }
-  .cliq-file-box {
-    border: 2px dashed var(--border-2);
-    border-radius: var(--r-sm);
-    padding: 22px 16px; text-align: center;
-    cursor: pointer; transition: all .15s;
-    background: var(--surface-2);
-  }
-  .cliq-file-box:hover {
-    border-color: var(--brand);
-    background: color-mix(in srgb, var(--brand) 6%, transparent);
-  }
-  .cliq-file-box.has-file {
-    border-style: solid; border-color: var(--brand);
-    background: color-mix(in srgb, var(--brand) 8%, transparent);
-  }
-  .cfb-icon { font-size: 30px; display: block; margin-bottom: 6px; }
-  .cfb-text { font-size: 14px; color: var(--text-2); font-weight: 600; word-break: break-all; }
-  .cliq-file-box.has-file .cfb-text { color: var(--brand); }
-  .cliq-modal-actions {
-    display: flex; gap: 10px;
-    margin-top: 22px; padding-top: 20px;
-    border-top: 1px solid var(--border);
-  }
-  .cliq-modal-actions .btn { flex: 1; }
-  @media (max-width: 640px) {
-    .cliq-modal-card { padding: 26px 20px 20px; border-radius: var(--r-md); }
-    .cliq-modal-card h3 { font-size: 18px; }
-    .cliq-modal-actions { flex-direction: column-reverse; }
-  }
-  .paypal-buttons-container { position: relative; z-index: 1; }
+  .paypal-buttons-container { position: relative; z-index: 1; margin-top: 16px; }
 </style>
 </head>
 <body>
@@ -152,31 +85,38 @@
       <label><span data-i18n="checkout.address"></span><textarea name="address" required minlength="5"></textarea></label>
       <label><span data-i18n="checkout.notes"></span><textarea name="notes"></textarea></label>
 
-      <fieldset class="pay">
-        <legend data-i18n="checkout.payment"></legend>
-        <label class="radio">
-          <input type="radio" name="pay" value="COD" checked />
-          <span data-i18n="checkout.cod"></span>
+      <legend style="font-weight:800;color:var(--deep);margin-bottom:12px;font-size:14px" data-i18n="checkout.payment"></legend>
+      
+      <div class="pay-methods">
+        <label class="pay-option" id="payOnlineOption">
+          <div class="pay-option-label">
+            <input type="radio" name="pay" value="PAYPAL" class="pay-radio" />
+            <span data-i18n="checkout.payOnline"></span>
+          </div>
+          <div class="pay-icons">
+            <svg viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="38" height="24" rx="4" fill="#1A1F71"/><path d="M15.5 16.5H12.8L14.5 7.5H17.2L15.5 16.5ZM10.9 7.5L8.3 13.7L8 12.2C7.5 10.6 6 8.9 4.3 8.1L6.7 16.5H9.6L14.4 7.5H10.9ZM29.4 16.5H32L29.8 7.5H27.5C27 7.5 26.5 7.8 26.3 8.3L22.1 16.5H24.9L25.5 14.8H29L29.4 16.5ZM26.3 12.7L27.7 8.9L28.5 12.7H26.3ZM22.7 10.1C22.7 9.5 21.8 9 20.7 9C18.8 9 17.4 9.9 17.4 11.3C17.4 12.4 18.3 13 19.4 13.4C20.5 13.8 20.9 14 20.9 14.5C20.9 15.1 20.2 15.4 19.4 15.4C18.4 15.4 17.8 15 17.4 14.7L16.9 16C17.5 16.4 18.5 16.6 19.4 16.6C21.4 16.6 22.8 15.7 22.8 14.3C22.8 13.2 22 12.6 20.8 12.2C19.8 11.8 19.4 11.6 19.4 11.1C19.4 10.6 20 10.3 20.7 10.3C21.5 10.3 22 10.7 22.2 10.9L22.7 10.1Z" fill="white"/></svg>
+            <svg viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="38" height="24" rx="4" fill="#1A1A1A"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 7.5C20.5 8.8 21.5 10.3 21.5 12C21.5 13.7 20.5 15.2 19 16.5C17.5 15.2 16.5 13.7 16.5 12C16.5 10.3 17.5 8.8 19 7.5Z" fill="#FF5F00"/></svg>
+            <svg viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="38" height="24" rx="4" fill="#003087"/><path d="M13.3 8.5H15.1C16.4 8.5 17.2 9 17.2 10C17.2 11 16.4 11.6 15 11.6H14.1L13.3 16H11.6L13.3 8.5ZM14.5 10.5C15.2 10.5 15.5 10.3 15.5 10C15.5 9.6 15.1 9.6 14.7 9.6H14.1L13.8 10.5H14.5Z" fill="#F5F5F5"/><path d="M17.6 9.8H19.4C20.7 9.8 21.5 10.3 21.5 11.3C21.5 12.3 20.7 12.9 19.3 12.9H18.4L17.6 17.3H15.9L17.6 9.8ZM18.8 11.8C19.5 11.8 19.8 11.6 19.8 11.3C19.8 10.9 19.4 10.9 19 10.9H18.4L18.1 11.8H18.8Z" fill="#F5F5F5"/><path d="M23.5 10.8C22.7 10.8 22.1 11.1 21.7 11.6L22.4 12.1C22.7 11.7 23.1 11.5 23.6 11.5C24.3 11.5 24.7 11.9 24.7 12.5L24.7 12.7H23.4C21.9 12.7 21.2 13.3 21.2 14.3C21.2 15.1 21.9 15.6 22.7 15.6C23.6 15.6 24.2 15 24.5 14.6H24.5L24.7 15.5H26L25.2 12.3C25 11.2 24.5 10.8 23.5 10.8ZM24.4 13.6C24.4 14.1 23.8 14.5 23.2 14.5C22.8 14.5 22.5 14.3 22.5 14C22.5 13.4 23 13.3 23.8 13.3H24.4V13.6Z" fill="#F5F5F5"/><path d="M26 10.9H27.6L26.8 14.6L26.8 17.3H25.2L26 10.9Z" fill="#F5F5F5"/><path d="M21 10C20.3 10 19.8 10.3 19.5 10.8H19.5L19.3 9.8H17.9L16.2 17.3H17.9L17.9 17.3L18.2 15.7C18.3 15.9 18.7 16 19.1 16C20.5 16 21.5 15 21.5 13.3C21.5 12 20.8 11 21 10ZM19.3 14.5C18.6 14.5 18.2 14.2 18.1 13.9L18.3 12.8C18.6 12.2 19.1 11.9 19.6 11.9C20.2 11.9 20.6 12.3 20.6 13C20.6 13.8 20 14.5 19.3 14.5Z" fill="#F5F5F5"/></svg>
+          </div>
         </label>
-        <label class="radio">
-          <input type="radio" name="pay" value="CLIQ" />
-          <span data-i18n="checkout.cliq"></span>
-        </label>
-        <label class="radio">
-          <input type="radio" name="pay" value="PAYPAL" />
-          <span data-i18n="checkout.paypal"></span>
-        </label>
-      </fieldset>
 
-      <div id="cliqSummary" class="cliq-summary" hidden>
-        <div class="cs-row">
-          <span class="cs-label" data-i18n="checkout.cliqEnabled"></span>
-          <button type="button" class="cs-edit" id="cliqEdit" data-i18n="checkout.cliqEdit"></button>
-        </div>
-        <div class="cs-file" id="cliqFileName" data-i18n="checkout.cliqNoProof"></div>
+        <label class="pay-option active" id="payCodOption">
+          <div class="pay-option-label">
+            <input type="radio" name="pay" value="COD" class="pay-radio" checked />
+            <span data-i18n="checkout.cod"></span>
+          </div>
+          <div class="pay-icons">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
+          </div>
+        </label>
       </div>
 
-      <label class="points-box">
+      <div id="paypalBox" style="display: none;">
+        <div id="paypal-button-container"></div>
+        <p style="text-align: center; font-size: 12px; color: var(--text-3); margin-top: 10px;">ادفع بأمان عبر PayPal أو البطاقات</p>
+      </div>
+
+      <label class="points-box" style="margin-top:20px">
         <input type="checkbox" id="usePoints" />
         <span data-i18n="checkout.points"></span>
         <small data-i18n="checkout.pointsHint"></small>
@@ -199,11 +139,6 @@
       <div class="row" id="couponRow" style="display:none"><span data-i18n="checkout.couponCode"></span><span id="sumCoupon"></span></div>
       <div class="row"><span data-i18n="cart.shipping"></span><span id="sumShip"></span></div>
       <div class="row total"><span data-i18n="cart.total"></span><span id="sumTotal"></span></div>
-      
-      <div id="paypalBox" style="display:none; margin-top: 20px;">
-        <div id="paypal-button-container"></div>
-        <p style="text-align: center; font-size: 12px; color: var(--text-3); margin-top: 10px;">ادفع بأمان عبر PayPal أو البطاقات</p>
-      </div>
 
       <button class="btn primary full" data-i18n="checkout.placeOrder" type="submit" id="submitBtn" style="margin-top:16px"></button>
     </aside>
@@ -211,36 +146,6 @@
 
   <div id="successBox" class="success-box" hidden style="text-align: center; padding: 40px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border);"></div>
 </main>
-
-<div id="cliqModal" hidden>
-  <div class="cliq-modal-card">
-    <button type="button" class="cliq-x" id="cliqX" aria-label="close">×</button>
-    <h3 data-i18n="checkout.cliqModalTitle"></h3>
-    <div class="cliq-info">
-      <div class="cliq-row">
-        <span data-i18n="checkout.cliqId"></span>
-        <code id="cliqCode" class="font-en">SAWWA1</code>
-      </div>
-      <div class="cliq-row">
-        <span data-i18n="checkout.cliqAmount"></span>
-        <strong id="cliqAmount" class="font-en">0.00 JOD</strong>
-      </div>
-    </div>
-    <p class="cliq-hint" data-i18n="checkout.cliqInstructions"></p>
-    <label class="cliq-file-label">
-      <span data-i18n="checkout.proof"></span>
-      <input type="file" id="cliqFileInput" accept="image/*" hidden />
-      <div class="cliq-file-box" id="cliqFileBox">
-        <span class="cfb-icon">📷</span>
-        <span class="cfb-text" id="cliqFileText">اضغط لاختيار صورة</span>
-      </div>
-    </label>
-    <div class="cliq-modal-actions">
-      <button type="button" class="btn primary" id="cliqConfirm" data-i18n="checkout.cliqConfirm"></button>
-      <button type="button" class="btn ghost" id="cliqCancel" data-i18n="checkout.cliqCancel"></button>
-    </div>
-  </div>
-</div>
 
 <script src="https://www.paypal.com/sdk/js?client-id=BAAtMFdRIAJ4WEp4L7-smhFsvU4uXti9FlWhntsJyzjFjQpCTxs1On6xZ94aJq0zmKzK7bAvLpAuWWsMBY&currency=USD&components=buttons"></script>
 <script src="js/supabase-config.js"></script>
@@ -260,69 +165,49 @@
 <script>
 UI.init({
   after: () => {
-    const lang = window.SAWWA.lang;
+    const lang = window.SAWWA?.lang || "ar";
 
-    const cliqModal      = document.getElementById("cliqModal");
-    const cliqSummary    = document.getElementById("cliqSummary");
-    const cliqFileName   = document.getElementById("cliqFileName");
-    const cliqFileInput  = document.getElementById("cliqFileInput");
-    const cliqFileBox    = document.getElementById("cliqFileBox");
-    const cliqFileText   = document.getElementById("cliqFileText");
-    const cliqCode       = document.getElementById("cliqCode");
-    const cliqAmount     = document.getElementById("cliqAmount");
-    const codRadio       = document.querySelector('input[name=pay][value="COD"]');
-    const cliqRadio      = document.querySelector('input[name=pay][value="CLIQ"]');
+    const codOption      = document.getElementById("payCodOption");
+    const onlineOption   = document.getElementById("payOnlineOption");
+    const codRadio       = document.querySelector('input[name="pay"][value="COD"]');
+    const paypalRadio    = document.querySelector('input[name="pay"][value="PAYPAL"]');
     const citySel        = document.getElementById("citySelect");
     const paypalBox      = document.getElementById("paypalBox");
     const submitBtn      = document.getElementById("submitBtn");
 
-    if (cliqCode) cliqCode.textContent = window.SAWWA.cliqId || "SAWWA1";
-    
-    // ترجمة المدن
-    citySel.innerHTML = `<option value="">--</option>` + Shipping.list().map((c) => {
-      const label = lang === "ar" ? c : Shipping.ZONES[c].en;
-      return `<option value="${c}">${label}</option>`;
-    }).join("");
+    // تعبئة المدن
+    if (typeof Shipping !== 'undefined' && Shipping.list) {
+      citySel.innerHTML = `<option value="">--</option>` + Shipping.list().map((c) => {
+        const label = lang === "ar" ? c : (Shipping.ZONES[c]?.en || c);
+        return `<option value="${c}">${label}</option>`;
+      }).join("");
+    }
 
     let appliedCoupon = null;
-    let cliqProofFile = null;
     let paypalOrderId = null;
 
-    const openCliqModal = () => { sum(); cliqModal.hidden = false; document.body.style.overflow = "hidden"; };
-    const closeCliqModal = () => { cliqModal.hidden = true; document.body.style.overflow = ""; };
-
-    cliqRadio.addEventListener("change", () => { if (cliqRadio.checked) openCliqModal(); });
-    codRadio.addEventListener("change", () => { if (codRadio.checked) { cliqSummary.hidden = true; } });
-    document.getElementById("cliqEdit").onclick = () => openCliqModal();
-    document.getElementById("cliqX").onclick = () => { if (!cliqProofFile) { codRadio.checked = true; cliqSummary.hidden = true; } closeCliqModal(); };
-    document.getElementById("cliqCancel").onclick = () => { if (!cliqProofFile) { codRadio.checked = true; cliqSummary.hidden = true; } closeCliqModal(); };
-    
-    document.getElementById("cliqConfirm").onclick = () => {
-      if (!cliqProofFile) { if (window.UI?.toast) UI.toast(lang === "ar" ? "ارفع صورة الإشعار أولاً" : "Upload receipt first", "warn"); return; }
-      cliqRadio.checked = true; cliqSummary.hidden = false; cliqFileName.textContent = cliqProofFile.name || "صورة"; closeCliqModal();
+    const setActivePay = (val) => {
+      if (val === "COD") {
+        codOption.classList.add("active");
+        onlineOption.classList.remove("active");
+        paypalBox.style.display = "none";
+        submitBtn.style.display = "block";
+      } else {
+        onlineOption.classList.add("active");
+        codOption.classList.remove("active");
+        paypalBox.style.display = "block";
+        submitBtn.style.display = "none"; 
+        initPayPal();
+      }
     };
 
-    cliqFileBox.onclick = () => cliqFileInput.click();
-    cliqFileInput.onchange = (e) => {
-      const f = e.target.files?.[0]; if (!f) return;
-      cliqProofFile = f; cliqFileBox.classList.add("has-file"); cliqFileText.textContent = f.name;
-    };
-
-    document.querySelectorAll('input[name="pay"]').forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        if (e.target.value === 'PAYPAL') {
-          paypalBox.style.display = 'block';
-          submitBtn.style.display = 'none'; 
-          initPayPal();
-        } else {
-          paypalBox.style.display = 'none';
-          submitBtn.style.display = 'block';
-        }
-      });
-    });
+    codOption.onclick = () => { codRadio.checked = true; setActivePay("COD"); };
+    onlineOption.onclick = () => { paypalRadio.checked = true; setActivePay("PAYPAL"); };
 
     const initPayPal = () => {
       if (window.paypal) {
+        document.getElementById('paypal-button-container').innerHTML = '';
+        
         window.paypal.Buttons({
           style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
           createOrder: async () => {
@@ -384,8 +269,6 @@ UI.init({
       else cRow.style.display = "none";
 
       document.getElementById("pointsBalance").textContent = `${pts} ${lang === "ar" ? "نقطة" : "pts"}`;
-      if (cliqAmount) cliqAmount.textContent = UI.fmt(total);
-
       return { sub, ship, discPts, discCoupon, total };
     };
 
@@ -444,7 +327,6 @@ UI.init({
         paymentMethod: payMethod,
         paymentStatus: payStatus,
         status: "PENDING",
-        cliqProofName: payMethod === "CLIQ" && cliqProofFile ? cliqProofFile.name : null,
         pointsEarned: earned, pointsUsed: usedPts
       };
 
@@ -453,7 +335,6 @@ UI.init({
       if (window.SB && typeof SB !== 'undefined' && SB.isEnabled()) {
         SB.orders.create(order).then((ok) => {
           if (ok) console.log("[Checkout] Order synced to cloud:", order.id);
-          else console.warn("[Checkout] Cloud save failed");
         });
       }
 
@@ -482,9 +363,6 @@ UI.init({
       if (payMethod === "PAYPAL") {
         successIcon = "💳";
         successMessage = lang === "ar" ? "تم الدفع بنجاح عبر PayPal / البطاقة!" : "Payment successful via PayPal/Card!";
-      } else if (payMethod === "CLIQ") {
-        successIcon = "📱";
-        successMessage = lang === "ar" ? "تم استلام طلبك، سنتحقق من إشعار Cliq قريباً." : "Order received, we'll verify the Cliq receipt soon.";
       } else {
         successIcon = "💵";
         successMessage = lang === "ar" ? "تم استلام طلبك بنجاح، الدفع عند الاستلام." : "Order received successfully, Cash on Delivery.";
@@ -529,7 +407,6 @@ UI.init({
 
       if (Cart.get().length === 0) { UI.toast(lang === "ar" ? "سلتك فارغة" : "Cart is empty", "warn"); return; }
       if (!city) { UI.toast(lang === "ar" ? "اختر المحافظة" : "Select governorate", "warn"); return; }
-      if (pay === "CLIQ" && !cliqProofFile) { UI.toast(lang === "ar" ? "ارفع صورة الإشعار" : "Upload receipt", "warn"); openCliqModal(); return; }
 
       const ok = await UI.confirm(
         lang === "ar" ? "تأكيد الطلب" : "Confirm Order",
@@ -538,7 +415,7 @@ UI.init({
       );
       if (!ok) return;
 
-      completeOrder(pay, pay === "CLIQ" ? "AWAITING_VERIFICATION" : "PENDING");
+      completeOrder(pay, "PENDING");
     };
   }
 });
