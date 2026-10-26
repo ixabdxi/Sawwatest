@@ -40,8 +40,8 @@ UI.init({
       if (items.length === 0) {
         wrap.innerHTML = `
           <div class="empty-cart">
-            <p class="muted">${lang === 'ar' ? 'سلتك فارغة.' : 'Your cart is empty.'}</p>
-            <a href="shop.html" class="btn primary">${lang === 'ar' ? 'تسوّق الآن' : 'Shop now'}</a>
+            <p class="muted">${t('cart.empty')}</p>
+            <a href="shop.html" class="btn primary">${t('cart.shopNow')}</a>
           </div>`;
         return;
       }
@@ -63,14 +63,14 @@ UI.init({
                 <button data-act="inc">+</button>
               </div>
               <div class="ci-total price">${UI.fmt(it.price * it.qty)}</div>
-              <button class="link danger" data-act="rm">${lang === 'ar' ? 'إزالة' : 'Remove'}</button>
+              <button class="link danger" data-act="rm">${t('cart.remove')}</button>
             </div>`).join("")}
         </div>
         <div class="cart-summary reveal">
-          <div class="row"><span>${lang === 'ar' ? 'المجموع' : 'Subtotal'}</span><span>${UI.fmt(sub)}</span></div>
-          <div class="row"><span>${lang === 'ar' ? 'الشحن' : 'Shipping'}</span><span>${UI.fmt(shipping)}</span></div>
-          <div class="row total"><span>${lang === 'ar' ? 'الإجمالي' : 'Total'}</span><span>${UI.fmt(total)}</span></div>
-          <a href="checkout.html" class="btn primary full" style="margin-top:16px">${lang === 'ar' ? 'إتمام الشراء' : 'Checkout'}</a>
+          <div class="row"><span>${t('cart.subtotal')}</span><span>${UI.fmt(sub)}</span></div>
+          <div class="row"><span>${t('cart.shipping')}</span><span>${UI.fmt(shipping)}</span></div>
+          <div class="row total"><span>${t('cart.total')}</span><span>${UI.fmt(total)}</span></div>
+          <a href="checkout.html" class="btn primary full" style="margin-top:16px">${t('cart.checkout')}</a>
         </div>`;
       setTimeout(() => wrap.querySelectorAll(".reveal").forEach(el => el.classList.add("in")), 30);
       wrap.querySelectorAll("[data-act]").forEach((el) => {
