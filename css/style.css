@@ -283,29 +283,87 @@ html.dark .np-head strong { color: var(--mint); }
 .hs-dots span { width: 20px; height: 4px; background: rgba(255,255,255,.3); border-radius: var(--r-full); cursor: pointer; }
 .hs-dots span.active { background: var(--gold); }
 
-/* ============ شريط الثقة ============ */
+/* ============ شريط الثقة (Trust Strip) ============ */
 .trust-strip {
-  max-width: 1280px; margin: -40px auto 0; position: relative; z-index: 10;
-  padding: 0 24px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  max-width: 1280px; 
+  margin: -35px auto 0; 
+  position: relative; 
+  z-index: 10;
+  padding: 0 24px; 
+  display: flex; 
+  gap: 12px; 
+  flex-wrap: wrap; 
+  justify-content: center;
 }
-.trust-item {
-  flex: 1 1 auto; min-width: 150px; padding: 16px 20px;
-  border-radius: var(--r); background: var(--surface);
-  box-shadow: var(--shadow-md); text-align: center; font-size: 13px; font-weight: 700; color: var(--deep);
-}
-html.dark .trust-item { color: var(--text); }
 
-/* ============ الحاوية والعناوين ============ */
-.container { max-width: 1280px; margin: 0 auto; padding: 60px 24px 80px; position: relative; }
-.container.narrow { max-width: 760px; }
-.section-title {
-  font-size: 24px; font-weight: 800; color: var(--deep); margin-bottom: 28px;
-  display: flex; align-items: center; gap: 16px;
+.trust-item {
+  flex: 1 1 auto; 
+  min-width: 150px; 
+  padding: 16px 20px;
+  border-radius: var(--r-md); 
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(10, 61, 56, 0.06);
+  text-align: center; 
+  font-size: 13px; 
+  font-weight: 800; 
+  color: var(--deep);
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
-html.dark .section-title { color: var(--mint); }
-.section-title::after { content: ""; flex: 1; height: 2px; background: var(--border); }
-.page-title { font-size: 32px; font-weight: 800; color: var(--deep); margin: 20px 0 30px; }
-html.dark .page-title { color: var(--mint); }
+
+.trust-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(10, 61, 56, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.trust-item svg {
+  width: 20px;
+  height: 20px;
+  color: var(--gold); /* لون أيقونات ذهبي */
+  flex-shrink: 0;
+}
+
+/* الوضع الداكن */
+html.dark .trust-item {
+  background: rgba(10, 61, 56, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--mint);
+}
+html.dark .trust-item:hover {
+  background: rgba(10, 61, 56, 0.9);
+}
+html.dark .trust-item svg {
+  color: var(--gold);
+}
+
+/* الجوال */
+@media (max-width: 900px) {
+  .trust-strip {
+    margin-top: -20px;
+    gap: 8px;
+  }
+  .trust-item {
+    flex: 1 1 calc(50% - 8px);
+    padding: 12px 10px;
+    font-size: 11px;
+    flex-direction: column; /* الأيقونة فوق النص في الجوال */
+    gap: 6px;
+  }
+  .trust-item svg {
+    width: 24px;
+    height: 24px;
+  }
+  .trust-item:last-child {
+    flex: 1 1 100%;
+  }
+}
 
 /* ============ كروت المنتجات ============ */
 .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
