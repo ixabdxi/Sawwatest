@@ -129,16 +129,17 @@ window.UI = (() => {
     });
   };
 
-  /* ============ COUNTDOWN TIMER ============ */
+  /* ============ COUNTDOWN TIMER (FIXED) ============ */
   const initCountdown = () => {
     const prodWrap = document.getElementById("productWrap");
     const cartWrap = document.getElementById("cartWrap");
     
     let targetElement = null;
     if (prodWrap) targetElement = prodWrap;
-    if (cartWrap) targetElement = cartWrap;
+    else if (cartWrap) targetElement = cartWrap;
 
-    if (!targetElement) return;
+    // إذا لم نجد العنصر، نخرج من الدالة بأمان بدون إحداث أخطاء
+    if (!targetElement || !targetElement.parentNode) return;
 
     const timerEl = el("div", "countdown-timer");
     timerEl.innerHTML = `
