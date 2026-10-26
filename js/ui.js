@@ -129,6 +129,64 @@ window.UI = (() => {
     });
   };
 
+  /* ============ COUNTDOWN TIMER ============ */
+  const initCountdown = () => {
+    const prodWrap = document.getElementById("productWrap");
+    const cartWrap = document.getElementById("cartWrap");
+    
+    let targetElement = null;
+    if (prodWrap) targetElement = prodWrap;
+    if (cartWrap) targetElement = cartWrap;
+
+    if (!targetElement) return;
+
+    // إنشاء عنصر العداد
+    const timerEl = el("div", "countdown-timer");
+    timerEl.innerHTML = `
+      <div class="ct-icon">⏳</div>
+      <div class="ct-text">
+        <strong>${window.SAWWA.lang === "ar" ? "ينتهي العرض الخاص قريباً!" : "Special offer ends soon!"}</strong>
+        <div class="ct-clock">
+          <span id="ct-h">00</span>:<span id="ct-m">00</span>:<span id="ct-s">00</span>
+        </div>
+      </div>
+    `;
+
+    // إدراج العداد قبل العنصر الأساسي
+    targetElement.parentNode.insertBefore(timerEl, targetElement);
+
+    // حساب الوقت (ينتهي كل 24 ساعة - منتصف الليل)
+    const tick = () => {
+      const now = new Date();
+      const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+      const diff = endOfDay - now;
+
+      if (diff <= 0) {
+        document.getElementById("ct-h").textContent = "00";
+        document.getElementById("ct-m").textContent = "00";
+        document.getElementById("ct-s").textContent = "00";
+        return;
+      }
+
+      const h = Math.floor(diff / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      const pad = (n) => String(n).padStart(2, "0");
+      
+      const hEl = document.getElementById("ct-h");
+      const mEl = document.getElementById("ct-m");
+      const sEl = document.getElementById("ct-s");
+
+      if (hEl) hEl.textContent = pad(h);
+      if (mEl) mEl.textContent = pad(m);
+      if (sEl) sEl.textContent = pad(s);
+    };
+
+    tick();
+    setInterval(tick, 1000);
+  };
+
   /* ============ NOTIFICATIONS BELL ============ */
   const openNotifPanel = () => {
     const existing = document.getElementById("notifPanel");
@@ -160,7 +218,6 @@ window.UI = (() => {
       p.remove();
     };
 
-    // close on outside click
     setTimeout(() => {
       const off = (e) => {
         if (!p.contains(e.target) && !e.target.closest("#notifBtn")) {
@@ -355,6 +412,7 @@ window.UI = (() => {
       initTilt();
       initMagnetic();
       initSplitText();
+      initCountdown();
     }, 100);
   };
 
